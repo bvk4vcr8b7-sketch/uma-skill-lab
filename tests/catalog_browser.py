@@ -1,5 +1,5 @@
 from playwright.sync_api import sync_playwright
-import json
+import subprocess
 with sync_playwright() as pw:
  import os
  browser=getattr(pw,os.environ.get('BROWSER','chromium')).launch()
@@ -8,6 +8,13 @@ with sync_playwright() as pw:
   errors=[]
   page.on('pageerror',lambda e:errors.append(str(e)))
   page.route('https://**/*',lambda route:route.abort())
+  legacy = subprocess.check_output(['git','show','4833d7cbae1309cdb537055cfab86b0c77a77573:index.html'],text=True)
+  page.route('**/legacy.html',lambda route:route.fulfill(content_type='text/html; charset=utf-8',body=legacy))
+  page.goto('http://127.0.0.1:8765/legacy.html')
+  page.locator('#budget').fill('8765')
+  page.locator('#budget').dispatch_event('change')
+  page.evaluate("state.skills.push({name:'手入力の回帰確認',type:'因子',owner:'',pt:120,hint:1,selected:true});save()")
+  before=page.evaluate("cost(state.skills.find(x=>x.name==='手入力の回帰確認'),0)")
   page.goto('http://127.0.0.1:8765/')
   page.wait_for_function("document.getElementById('catalogStatus').textContent.includes('568')",timeout=10000)
   print(page.locator('#catalogStatus').inner_text(),errors)
@@ -23,9 +30,10 @@ with sync_playwright() as pw:
   page.fill('#pickerSearch','2026-11-10')
   assert page.locator('#pickerGrid button').count()==2
   page.locator('#pickerGrid button').first.click()
-  page.locator('#budget').fill('8765')
-  page.locator('#budget').dispatch_event('change')
-  page.evaluate("state.skills.push({name:'手入力の回帰確認',type:'因子',owner:'',pt:120,hint:1,selected:true});save()")
+  assert page.locator('#budget').input_value()=='8765'
+  assert page.evaluate("cost(state.skills.find(x=>x.name==='手入力の回帰確認'),0)")==before
+  page.fill('#catalogSkill','右回り○')
+  assert '90 Pt' in page.locator('#catalogSkillResults').text_content()
   page.reload()
   page.wait_for_function("document.getElementById('catalogStatus').textContent.includes('568')")
   assert page.locator('#budget').input_value()=='8765'

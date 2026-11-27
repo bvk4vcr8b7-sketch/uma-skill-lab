@@ -16,10 +16,19 @@
     "https://github.com/shiyuzi-ship-it/umamusumedb/blob/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/data/supportCards.json",
     "https://github.com/shiyuzi-ship-it/umamusumedb/blob/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/data/characters.json",
     "https://github.com/shiyuzi-ship-it/umamusumedb/blob/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/data/skills.json",
-    "https://github.com/Cilda/UmaUmaChecker/blob/42da047b02dca0282f5fa6500cdca9880656b891/UmaUmaChecker/Library/Chara.json"
+    "https://github.com/Cilda/UmaUmaChecker/blob/42da047b02dca0282f5fa6500cdca9880656b891/UmaUmaChecker/Library/Chara.json",
+    "https://github.com/kakuun333/UmaAssistant/blob/main/UmaAssistant/UmaData/convert_data/event_data_jp_cvt_tw_card.json"
   ],
   "additional": [
     "https://gametora.com/ja/umamusume/supports/20102-stay-gold",
     "https://gametora.com/ja/umamusume/supports/30324-no-reason"
-  ]
+  ],
+  "fields": {
+    "supportCards.json": "画像・カードID・属性・実装日",
+    "support_card.txt": "各凸の通常効果・固有効果・特殊効果コード・通常ヒント",
+    "characters.json": "衣装・覚醒Lv・画像",
+    "skill_data.txt / all_skill_info.txt": "スキルPt・進化元・発動条件",
+    "Chara.json / Events.json / UmaMusumeLibrary.json": "育成・サポートイベント、選択肢と結果",
+    "eventLinks.json": "同一衣装・カードの資料表記との対応。Rの取得イベント名はUmaAssistantの日本語対応表で照合"
+  }
 }

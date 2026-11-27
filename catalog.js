@@ -53,7 +53,9 @@ function catalogDetails(){
     if(item.localHints?.length)lines.push('通常ヒント '+item.localHints.join('、'));
     if(item.hintSkillIds)lines.push('通常ヒント '+item.hintSkillIds.map(id=>catalogSkills.get(id)?.name||id).join('、'));
     for(const [lv,ids] of Object.entries(item.skillsByAwakening||{}))lines.push((lv==='1'?'初期':'覚醒Lv'+lv)+'　'+ids.map(id=>catalogSkills.get(id)?.name||id).join('、'));
-    for(const entry of catalog.stories[group][catalogKey(item.name)]||[]){
+    const stories=catalog.stories[group][catalogKey(item.name)]||[];
+    if(!stories.length)lines.push('イベント選択肢・報酬は未照合');
+    for(const entry of stories){
       for(const [title,choices] of Object.entries(entry)){
         lines.push('\n'+title);
         for(const opt of choices)lines.push(opt.Option+'　'+opt.Effect);
@@ -73,8 +75,17 @@ const catalogApply=dbApply;
 dbApply=function(){catalogApply();catalogDetails()};
 async function loadCatalog(){
   try{
-    const keys=['supports','characters','skills','events','stories'];
+    const keys=['supports','characters','skills','events','stories','eventLinks'];
     catalog=Object.fromEntries(await Promise.all(keys.map(async k=>[k,await getJSON('data/catalog/'+k+'.json')])));
+    for(const [group,owners] of Object.entries(catalog.eventLinks)){
+      const records=catalog.stories[group];
+      for(const [name,links] of Object.entries(owners)){
+        records[name]=links.flatMap(link=>{
+          const events=records[link.owner]||[];
+          return link.event?events.filter(e=>Object.prototype.hasOwnProperty.call(e,link.event)):events;
+        });
+      }
+    }
     catalogCards=new Map(catalog.supports.map(x=>[x.name,x]));
     catalogChars=new Map(catalog.characters.map(x=>[x.name,x]));
     catalogSkills=new Map(catalog.skills.map(x=>[x.id,x]));
