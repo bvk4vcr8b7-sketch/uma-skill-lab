@@ -21,7 +21,9 @@ function catalogMerge(key,records){
   for(const x of rawDB[path]||[]){
     if(String(x.id).startsWith('local-') && records.some(r=>catalogKey(r.name)===catalogKey(x.name)))continue;
     const base=merged.get(String(x.id));
-    merged.set(String(x.id),{...base,...x});
+    const row={...base,...x};
+    if(key==='supports' && base)row.type=base.type;
+    merged.set(String(x.id),row);
   }
   rawDB[path]=Array.from(merged.values());
 }
