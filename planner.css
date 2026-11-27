@@ -127,3 +127,7 @@ button.selectedImage:after{content:none}
 .skillBand.random{background:repeating-linear-gradient(120deg,var(--effect) 0 3px,transparent 3px 5px);border-block:1px solid var(--effect)}
 .skillBand.point{min-width:8px;height:8px;transform:translateX(-50%) rotate(45deg)}
 @media(max-width:600px){.axisControls select{min-height:32px;width:auto}.axisControls label{font-size:12px}.axisRow{grid-template-columns:25% minmax(0,1fr)}}
+
+.effectLegend{display:flex;flex-wrap:wrap;gap:3px 12px;margin:3px 0}
+.effectLegend span{font-size:12px}
+.effectLegend span:before{content:'';display:inline-block;width:.8em;height:.5em;background:var(--effect);margin-right:3px}

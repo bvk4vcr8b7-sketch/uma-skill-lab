@@ -124,6 +124,30 @@ with sync_playwright() as pw:
             return results;
         }""")
         assert statuses == ['条件未達','条件未達','取得可能'], statuses
+        costs = page.evaluate("""() => {
+            const item = {name:'費用試験',pt:130,type:'因子',owner:''};
+            return [0,10].map(k => [0,1,2,3,4,5].map(h => cost({...item,hint:h},k)));
+        }""")
+        assert costs == [[130,117,104,91,84,78],[117,104,91,78,71,65]]
+        assert page.evaluate("""() => {
+            clearSel();
+            const low={name:'先行直線○',skillId:201312,type:'因子',owner:'',hint:0,pt:130};
+            const high={...low,name:'先行直線◎',skillId:201311,pt:270,selected:true};
+            state.skills= [high,low,{...low,hint:5,selected:true}];
+            const [items]=chosen();
+            return items.size===2 && cost(items.get(low.name),0)===78 &&
+                   cost(items.get(high.name),0)===140 && cost({...high,type:'進化'},0)===0;
+        }""")
+        page.select_option('#dbScenario','らっしゃい！トレセン軒！')
+        assert page.evaluate("state.skills.some(s=>s.blockedReason)")
+        assert not page.evaluate("state.skills.some((s,i)=>s.blockedReason && document.getElementById('skill'+i))")
+        page.select_option('#filter','全件')
+        page.fill('#q','')
+        assert page.evaluate("state.skills.filter(s=>s.blockedReason).every(s=>document.getElementById('skill'+state.skills.indexOf(s))?.disabled)")
+        page.select_option('#autoMode','course')
+        page.get_by_role('button', name='条件に合う候補を選択').click()
+        assert page.evaluate("state.skills.filter(s=>s.selected).every(s=>autoEligible(s))")
+        assert page.locator('#courseTimeline .axisTick').count()==5
         assert not errors, errors
         page.close()
     browser.close()

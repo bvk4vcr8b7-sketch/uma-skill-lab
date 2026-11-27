@@ -3,6 +3,8 @@ const timelineOptions={selected:true,kind:'すべて',order:'位置順',phase:'�
 const effectTypes=['速度','加速','回復','複合','その他・未照合'];
 function effectType(s){
   if(effectTypes.includes(s.kind))return s.kind;
+  const verified={speed:'速度',acceleration:'加速',heal:'回復',multi:'複合',passive:'その他・未照合',other:'その他・未照合'}[catalog.effectTypes?.[s.skillId]];
+  if(verified)return verified;
   const detail=(catalogSkills.get(s.skillId)?.conditionText||[]).join(' ');
   const types=[['速度',/目標速度|現在速度/],['加速',/加速度/],['回復',/持久力回復|体力回復/]].filter(([,pattern])=>pattern.test(detail));
   return types.length>1?'複合':types[0]?.[0]||'その他・未照合';
@@ -50,6 +52,7 @@ function activationChart(selectedSkills){
   }
   entries.sort((a,b)=>(timelineOptions.order==='種別順'?effectTypes.indexOf(a.kind)-effectTypes.indexOf(b.kind):0)||a.first-b.first||a.s.name.localeCompare(b.s.name,'ja'));
   html+='<small>発動候補位置　◆ 固定位置　斜線 ランダム候補　実線 条件区間</small>';
+  html+='<div class="effectLegend">'+effectTypes.filter(k=>entries.some(e=>e.kind===k)).map(k=>'<span class="k'+effectTypes.indexOf(k)+'">'+k+'</span>').join('')+'</div>';
   for(const {s,kind,spans,partial} of entries){
     const text=spans.map(x=>(x.random?'ランダム候補':x.a===x.b?'固定位置':'条件区間')+' '+Math.round(x.a)+'–'+Math.round(x.b)+'m'+(x.conditional?'（順位・展開条件あり）':'')).join(' ／ ');
     const details='<details><summary>'+esc(s.name)+'</summary>'+esc(kind+' · '+(text||'区間判定不能')+(partial?' · 未照合条件あり':'')+' '+(catalogSkills.get(s.skillId)?.conditionText||[]).join(' ／ '))+'</details>';

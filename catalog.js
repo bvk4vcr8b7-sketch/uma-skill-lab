@@ -80,7 +80,7 @@ const catalogApply=dbApply;
 dbApply=function(){catalogApply();catalogDetails()};
 async function loadCatalog(){
   try{
-    const keys=['supports','characters','skills','events','stories','eventLinks','portraits','courses','toresenken','geometry','evolutionRules'];
+    const keys=['supports','characters','skills','events','stories','eventLinks','portraits','courses','toresenken','geometry','evolutionRules','effectTypes'];
     catalog=Object.fromEntries(await Promise.all(keys.map(async k=>[k,await getJSON('data/catalog/'+k+'.json')])));
     for(const [group,owners] of Object.entries(catalog.eventLinks)){
       const records=catalog.stories[group];
