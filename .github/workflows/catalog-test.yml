@@ -4,7 +4,7 @@ permissions:
   contents: read
 jobs:
   browser:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     strategy:
       matrix:
         browser: [chromium, webkit]
@@ -21,3 +21,29 @@ jobs:
         run: |
           python -m http.server 8765 --bind 127.0.0.1 &
           python tests/catalog_browser.py
+  inspect-event-data:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: Cilda/UmaUmaChecker
+          ref: 42da047b02dca0282f5fa6500cdca9880656b891
+          sparse-checkout: UmaUmaChecker/Library
+          persist-credentials: false
+      - name: Inspect character event data
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          data=json.loads(Path('UmaUmaChecker/Library/Chara.json').read_text())
+          for _ in range(6):
+              if isinstance(data,dict):
+                  print(list(data)[:3],len(data))
+                  data=next(iter(data.values()))
+              elif isinstance(data,list):
+                  print('list',len(data))
+                  data=data[0]
+              else:
+                  print(str(data)[:80])
+                  break
+          PY
