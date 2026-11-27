@@ -100,3 +100,24 @@ function courseTimeline(skills){
   }
   return result;
 }
+
+function acquisition(s){
+  if(!active(s))return '取得不可';
+  if(s.type!=='進化')return '取得可能';
+  return typeof catalog==='undefined'||!catalog?'判定不能':evolutionStatus(s);
+}
+function selectionReason(s){
+  const available=acquisition(s);
+  const source=s.owner||s.source||s.type;
+  if(available!=='取得可能')return '取得：'+available+'。'+(s.blockedReason||(s.pre?'進化元 '+s.pre+'・覚醒・育成実績を確認':'現在の編成・取得元の対象外'));
+  const status=verdict(s);
+  const catalogInfo=typeof catalogSkills==='undefined'?null:catalogSkills?.get(s.skillId);
+  const condition=s.condition||catalogInfo?.branches?.map(b=>[b.precondition,b.condition].filter(Boolean).join(' → ')).join(' ／ ')||'条件資料なし';
+  return '取得元：'+source+'。レース条件：'+status+'（'+condition+'）。自動選択：'+(autoEligible(s)?'対象':'除外')+($('autoMode').value==='course'?'（展開条件を除外）':'（展開条件付きも対象）')+(s.festival&&s.type==='進化'?'。シナリオ進化は先頭から最大2個':'');
+}
+function autoEligible(s){
+  if(acquisition(s)!=='取得可能'||verdict(s)!=='条件適合')return false;
+  if($('autoMode').value!=='course'||!s.skillId)return true;
+  if(typeof catalogSkills==='undefined'||!catalogSkills)return false;
+  return skillBranches(s).some(r=>r.spans.length&&!r.conditional&&!r.unknown);
+}
