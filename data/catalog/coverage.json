@@ -351,5 +351,317 @@
       "name": "[花ども集いて束となる]カレンブーケドール"
     }
   ],
-  "note": "イベント件数はカード・衣装別の収録数。全分岐の網羅性は未確定。スキル取得条件の網羅性は未集計。"
+  "note": "イベント件数はカード・衣装別の収録数。全分岐の網羅性は未確定。スキル取得条件の網羅性は未集計。",
+  "supportPortraits": {
+    "checked": 568,
+    "replaced": [
+      {
+        "id": 10145,
+        "name": "[トレセン学園]キセキ",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/10145.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 10146,
+        "name": "[トレセン学園]エフフォーリア",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/10146.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 10147,
+        "name": "[トレセン学園]ルーラーシップ",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/10147.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 10148,
+        "name": "[トレセン学園]サムソンビッグ",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/10148.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 10149,
+        "name": "[巫女]吾妻",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/10149.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 20099,
+        "name": "[夕映えに身をゆだねて]メジロアルダン",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/20099.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 20100,
+        "name": "[瞬光]カルストンライトオ",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/20100.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 20101,
+        "name": "[清く、やわらかな夜]ゼンノロブロイ",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/20101.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 20102,
+        "name": "[黄昏に馳せる追憶]ステイゴールド",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/20102.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 30300,
+        "name": "[賑やかな未来を乗せて走れ！]サクラチヨノオー",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/30300.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 30301,
+        "name": "[スマイル・エバーアフター]グランアレグリア",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/30301.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 30302,
+        "name": "[永久の誓い、永久の輝き]サトノダイヤモンド",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/30302.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 30303,
+        "name": "[『ずーっと一緒、だぞー！』]ブラストワンピース",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/30303.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 30304,
+        "name": "[その執念は怒濤が如く]メイショウドトウ",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/30304.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 30305,
+        "name": "[一杯のノスタルジア]駿川たづな",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/30305.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 30306,
+        "name": "[両手いっぱい、小倉愛]ナイスネイチャ",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/30306.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 30307,
+        "name": "[巻頭カラーの夏]キセキ",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/30307.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 30308,
+        "name": "[夏空チルタイム]アーモンドアイ",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/30308.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 30309,
+        "name": "[天才的ガチエモSUMMER!!]フサイチパンドラ",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/30309.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 30310,
+        "name": "[ガブッと、笑顔に]レッドディザイア",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/30310.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 30311,
+        "name": "[As if Guided]エフフォーリア",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/30311.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 30312,
+        "name": "[時に交わる海と空]ミスターシービー",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/30312.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 30313,
+        "name": "[Endless Game]ルーラーシップ",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/30313.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 30314,
+        "name": "[わたしときみの交換こ♪]ハルウララ",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/30314.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 30315,
+        "name": "[ちょいワルヒーロー、見参！]ビコーペガサス",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/30315.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 30316,
+        "name": "[世界一小さなビッグバン]サムソンビッグ",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/30316.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 30317,
+        "name": "[行き先はあたたかな場所]マチカネタンホイザ",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/30317.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 30318,
+        "name": "[めぐるぐるぐるトレセン日和]ライスシャワー",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/30318.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 30319,
+        "name": "[晩餐]ナリタブライアン",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/30319.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 30320,
+        "name": "[冷凜なるビスクドール]アドマイヤグルーヴ",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/30320.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 30321,
+        "name": "[“最強”なる眷属]ドゥラメンテ",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/30321.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 30322,
+        "name": "[Time of Departure]マヤノトップガン",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/30322.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 30323,
+        "name": "[いとどめでたき、まつりかな]吾妻",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/30323.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 30324,
+        "name": "[馳せて奪うは映山紅]ノーリーズン",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/30324.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      }
+    ],
+    "missing": []
+  }
 }
