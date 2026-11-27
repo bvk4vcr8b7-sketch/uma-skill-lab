@@ -92,3 +92,29 @@ dbSetup = function () {
 };
 whiteLevel.value = String(state.whiteHint ?? 5);
 drawSelectedImages();
+
+const secondary = document.createElement('details');
+secondary.className = 'secondarySettings';
+const secondaryTitle = document.createElement('summary');
+secondaryTitle.textContent = '大会・覚醒・育成実績';
+secondary.append(secondaryTitle);
+const settingsFields = document.createElement('div');
+settingsFields.className = 'grid';
+secondary.append(settingsFields);
+settingsFields.append(race, $('awakening').closest('label'));
+for (const [key, name] of [[1,'スピード'],[2,'スタミナ'],[3,'パワー'],[4,'根性'],[5,'賢さ'],['fan','ファン数']]) {
+  const field = document.createElement('label');
+  field.textContent = name;
+  const input = document.createElement('input');
+  input.type = 'number';
+  input.min = '0';
+  input.placeholder = '未入力';
+  input.value = state.trainingFacts?.[key] ?? '';
+  input.onchange = () => {
+    (state.trainingFacts ??= {})[key] = input.value;
+    render();
+  };
+  field.append(input);
+  settingsFields.append(field);
+}
+setupGrid.after(secondary);

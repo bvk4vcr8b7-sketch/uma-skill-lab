@@ -75,3 +75,21 @@ button.selectedImage:after{content:none}
 .storyBranches > summary{font-size:12px;line-height:1.3;overflow-wrap:anywhere}
 .storyBranches > label{margin-top:4px}
 .pickerHead > button{width:auto}
+
+@media(max-width:600px){
+ main{padding-top:2px}
+ header{padding-block:5px}
+ .setup,.plan{padding:5px;margin:4px 0}
+ .setup .grid{gap:3px 5px}
+ .setup label,.traineeControl{gap:0}
+ .setup select,.setup input{min-height:32px}
+ .setup details{margin:3px 0}
+ .deckStrip{grid-template-columns:repeat(6,minmax(62px,1fr));gap:3px}
+ .deckSlot{gap:2px}
+ .selectedImage span{font-size:11px}
+ .skillEdit{display:inline-block;margin:0}
+ .skillMeta{display:inline;font-size:12px}
+ .plan td{padding:2px 4px}
+ .skillName{display:block;min-height:32px}
+ .stats div{padding:2px 4px}
+}
