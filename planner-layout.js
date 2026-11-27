@@ -101,6 +101,7 @@ secondaryTitle.textContent = '大会・覚醒・育成実績';
 const settingsFields = document.createElement('div');
 settingsFields.className = 'grid';
 secondary.append(settingsFields);
+sel.options[1].text='LoH・京都 3000m';sel.options[2].text='チャンミ・中山 2500m';
 settingsFields.append(race, $('awakening').closest('label'));
 for (const [key, name] of [[1,'スピード'],[2,'スタミナ'],[3,'パワー'],[4,'根性'],[5,'賢さ'],['fan','ファン数']]) {
   const field = document.createElement('label');
@@ -139,7 +140,7 @@ pinned.append(setupGrid);
 const options=document.createElement('div');
 options.className='targetOptions';
 const title=document.createElement('strong');title.textContent='自動選択の対象';options.append(title);
-for (const [key,label,initial] of [['other','その他の適合スキル',true],['green','適合する緑',true],['heal','適合する回復',true],['training','予定した進化に必要なスキル',false],['raceNeeds','レース中の発動・強化に必要な候補',false]]) {
+for (const [key,label,initial] of [['other','その他',true],['green','緑',true],['heal','回復',true],['training','進化条件',false],['raceNeeds','発動・強化条件',false]]) {
   const wrap=document.createElement('label'),input=document.createElement('input');input.type='checkbox';input.checked=state.autoTargets?.[key]??initial;
   input.onchange=()=>{(state.autoTargets??={})[key]=input.checked;save()};
   wrap.append(input,label);options.append(wrap);
@@ -153,7 +154,7 @@ strip.before(eventPanel);
 for(let i=0;i<6;i++){
   const section=document.createElement('section');
   section.innerHTML='<h3 id="eventHeading'+i+'"></h3>';
-  section.append($('cardEvents'+i));eventPanel.lastElementChild.append(section);
+  const rewards=document.createElement('p');rewards.id='rewardNames'+i;section.append(rewards,$('cardEvents'+i));eventPanel.lastElementChild.append(section);
   const button=document.createElement('button');button.id='reward'+i;button.className='rewardLink';
   button.onclick=()=>{eventPanel.open=true;section.scrollIntoView({block:'center'});section.querySelector('select')?.focus({preventScroll:true})};
   $('cardSkills'+i).before(button);

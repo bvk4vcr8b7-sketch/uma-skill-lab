@@ -7,7 +7,6 @@ function renderSkillBoard(planned){
     if(!active(s))continue;
     if(!best.has(s.name)||hint(s)>hint(best.get(s.name)))best.set(s.name,s);
   }
-  const opened=new Set([...document.querySelectorAll('.skillEntry details[open]')].map(e=>e.dataset.key));
   state.skills.forEach((s,i)=>{
     const availability=acquisition(s),own=selfEvolution(s),selected=active(s)&&planned.has(s.name);
     const status=verdict(s);
@@ -19,11 +18,10 @@ function renderSkillBoard(planned){
     if(selected&&availability!=='取得可能')warnings.push(availability);
     if(selected&&status!=='条件適合')warnings.push(status);
     if(selected&&status==='条件適合'&&skillBranches(s).some(r=>r.conditional))warnings.push('展開次第');
-    const key=JSON.stringify([s.owner,s.name,s.type,s.eventKey]),safeKey=esc(key);
     const override=state.hintOverrides?.[skillHintKey(s)];
     const components=skillComponents(s),rating=courseGroup(s);
     const cls=own||s.type==='進化'?'evolved':gold?'gold':'';
-    const level=hint(s);
+    const level=s.type==='サポカ通常'?(state.whiteHint??5):s.hint??0;
     const html='<article class="skillEntry '+cls+(duplicate?' duplicate':'')+(warnings.length?' warnEntry':'')+'">'+
       '<button id="skill'+i+'" class="skillName" aria-label="'+esc(s.name)+'" aria-pressed="'+selected+'" '+(!planAllowed(s)&&!selected?'disabled':'')+' onclick="toggleSkill('+i+','+!selected+')">'+
       (selected?'✓ ':'')+esc(s.name)+' <b>'+(cost(s,0)??'—')+'</b></button>'+
@@ -45,7 +43,7 @@ function renderSkillBoard(planned){
   for(let i=0;i<6;i++){
     const reward=$('reward'+i);if(!reward)continue;
     const list=state.skills.filter(s=>s.db&&s.type==='サポカ金'&&s.owner===state.deck[i]&&active(s)).map(s=>s.name);
-    reward.textContent=list.length?'報酬 '+list.length+'件':'イベント設定';reward.title=list.join('・');
+    reward.textContent=list.length?'報酬 '+list.length+'件':'イベント設定';reward.title=list.join('・');const names=$('rewardNames'+i);if(names)names.textContent=list.length?'予定報酬　'+[...new Set(list)].join('・'):'予定報酬なし';
     const heading=$('eventHeading'+i);if(heading)heading.textContent=(i+1)+' '+(state.deck[i]||'未選択');
   }
 }

@@ -69,6 +69,6 @@ function saveRunner(update){
 }
 $('runnerSave').onclick=()=>saveRunner(false);$('runnerUpdate').onclick=()=>saveRunner(true);
 $('runnerList').onchange=()=>{const x=loadLibrary().runners.find(x=>x.id===$('runnerList').value);if(!x)return;for(const [id,k] of [['runnerName','name'],['runnerRace','race'],['runnerStatus','status'],['runnerUse','use'],['runnerFit','fit']])$(id).value=x[k]};
-$('runnerOpen').onclick=()=>{const x=loadLibrary().runners.find(x=>x.id===$('runnerList').value);if(!x)return;localStorage.setItem('umaPlanner1',JSON.stringify({...x.plan,awakeningLevel:x.awakening}));location.reload()};
-$('awakening').value=state.awakeningLevel||$('awakening').value;$('awakening').addEventListener('change',()=>{state.awakeningLevel=$('awakening').value;save()});
+$('runnerOpen').onclick=()=>{const x=loadLibrary().runners.find(x=>x.id===$('runnerList').value);if(!x)return;localStorage.setItem('umaPlanner1',JSON.stringify({...x.plan,awakening:Number(x.awakening)}));location.reload()};
+
 libraryLists();fillFactor(null);

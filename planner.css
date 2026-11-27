@@ -190,3 +190,17 @@ button.selectedImage:after{content:none}
 
 .traitRow,.ocrRow{display:grid;grid-template-columns:minmax(54px,1fr) minmax(0,3fr) minmax(52px,1fr) 40px;gap:4px;margin:4px 0}.traitRow input,.ocrRow input{min-width:0}
 .dropArea{border:1px dashed #659779;padding:10px;background:#f2f8f3}.dropArea input{display:block;margin:5px 0}.ocrRow{grid-template-columns:24px minmax(0,3fr) 70px 55px}.ocrRow small{grid-column:2/-1}.inheritance{margin:4px 0}
+
+@media(max-width:600px){
+ .selectionBar{display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:3px}
+ .selectionBar .targetOptions{grid-column:1/-1;display:flex;align-items:center;flex-wrap:wrap;gap:2px}
+ .targetOptions strong{font-size:10px}.selectionBar .targetOptions label{padding:1px}
+ .selectionBar p{align-self:end}.selectionBar>label select,.selectionBar button{font-size:11px;min-height:27px;padding:2px}
+ .secondarySettings .grid{gap:2px}.secondarySettings .grid label{font-size:10px;gap:0}.secondarySettings .grid input,.secondarySettings .grid select{min-height:26px;padding:1px}
+ .setup>details,.setup>.eventSlot details,.inheritance,.supportEvents{margin:2px 0}
+ .deckSlot>select{min-width:0;width:100%}
+}
+.deckSlot{grid-template-columns:minmax(0,1fr)}.cardSkills,.skillEntry,.miniControls{min-width:0}.badges{overflow-wrap:anywhere}.miniControls{display:grid;grid-template-columns:minmax(0,1fr) 18px}.miniControls select{width:100%;max-width:none}.miniControls button{padding:0}
+@media(min-width:601px){.miniControls{grid-template-columns:56px 24px}}
+
+@media(max-width:600px){.miniControls select{appearance:none;text-align:center;border:1px solid #a7c3b2;background:#f1f6f3;font-size:11px;min-height:24px}.miniControls button{min-height:24px}}

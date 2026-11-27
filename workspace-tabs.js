@@ -31,13 +31,16 @@ const oldExport=exportData;exportData=function(){
   const url=URL.createObjectURL(new Blob([JSON.stringify({...state,libraryBackup:loadLibrary()},null,2)],{type:'application/json'}));
   a.href=url;a.download='uma-plan.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
 };
-const oldLoad=loadFile;loadFile=async function(input){
-  let data;try{data=JSON.parse(await input.files[0].text())}catch{return oldLoad(input)}
-  if(data.libraryBackup&&Array.isArray(data.skills)&&Array.isArray(data.deck)&&data.deck.length===6&&data.skills.every(s=>typeof s?.name==='string')&&Array.isArray(data.libraryBackup.factors)&&Array.isArray(data.libraryBackup.runners)){
-    writeLibrary(data.libraryBackup);
-  }
-  await oldLoad(input);
-  if(state.libraryBackup)delete state.libraryBackup;
-  save();location.reload();
+loadFile=async function(input){
+  try{
+    const data=JSON.parse(await input.files[0].text());
+    if(!Array.isArray(data.skills)||!Array.isArray(data.deck)||data.deck.length!==6||!data.skills.every(s=>typeof s?.name==='string'))throw Error();
+    const lib=data.libraryBackup;
+    if(lib&&(!Array.isArray(lib.factors)||!lib.factors.every(f=>typeof f?.id==='string'&&Array.isArray(f.traits))||!Array.isArray(lib.runners)||!lib.runners.every(r=>Array.isArray(r?.plan?.skills))))throw Error();
+    delete data.libraryBackup;
+    localStorage.setItem('umaPlanner1',JSON.stringify(data));
+    if(lib)writeLibrary(lib);
+    location.reload();
+  }catch{alert('読み込み失敗：形式・保存容量を確認してください')}
 };
 showWorkspace(0);

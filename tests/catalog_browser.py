@@ -162,6 +162,7 @@ with sync_playwright() as pw:
             if(!evo.selected||!state.skills.find(s=>s.name==='大望は煌めきとなりて')?.selected)return false;
             const base={type:'サポカ通常',hint:3,name:'一括検証',owner:'検証',db:true};
             state.whiteHint=5;
+            if(!catalog.supports.every(c=>(c.hintSkillIds||[]).every(id=>hint({...base,owner:c.name,skillId:id,hint:Math.min(5,1+(c.hintByLimit?.[0]||0))})===5)))return false;
             if(hint(base)!==5||hint({...base,type:'因子'})!==3||hint({...base,type:'サポカ金'})!==3)return false;
             state.hintOverrides[skillHintKey(base)]=1;
             if(hint(base)!==1)return false;
@@ -173,6 +174,12 @@ with sync_playwright() as pw:
                 document.documentElement.scrollWidth===innerWidth;
         }""")
         page.get_by_role('button',name='因子台帳',exact=True).click()
+        page.evaluate("reviewRecognition('スタミナ★★★\\n右回り○★2')")
+        assert page.locator('.ocrRow').count()==2
+        assert page.locator('.ocrRow').first.locator('select').first.input_value()=='青'
+        assert page.locator('.ocrRow').first.locator('select').last.input_value()=='3'
+        assert page.locator('.ocrRow').last.locator('select').last.input_value()=='2'
+        assert page.evaluate('loadLibrary().factors.length')==0
         page.fill('#factorName','台帳回帰')
         page.locator('.traitRow input').fill('右回り○')
         page.locator('.traitRow select').last.select_option('3')
