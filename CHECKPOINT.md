@@ -11,3 +11,12 @@
 - ブランチのルートで `python -m http.server 8765` を起動する。CIの `.github/workflows/catalog-test.yml` と `tests/catalog_browser.py` がデスクトップ・スマートフォン幅の操作テスト。Ver.1.4のコミット 4833d7c から保存を作り、更新後の復元と計算をチェックする。
 
 継続時は変更をデータ・実装・テストの単位でこのブランチに保存し、対応が進んだら coverage.json と本記録の件数を更新する。
+
+## UI改修後の再開
+
+- 改修前の復元点は `a117fb337f43fb0dd97fff5048f64ddb7a06edc4`。開発版専用Sitesの初回ソースは `8d3b459`、初回の保存済みバージョンは v1。
+- `index.html` に保存・Pt計算、`planner-layout.js` と `planner.css` に画面構成、`planner-events.js` に照合済みのイベント報酬の入力変換、`catalog.js` に同梱データの読み込みと詳細表示を配置。
+- 全568枚の参照画像の寸法を確認。縦長画像に差し替えた34枚と未取得一覧は `coverage.json` の `supportPortraits`。差し替え先は `portraits.json`。既存カタログの画像に対し、カードIDが一致するGameTora掲載のゲーム画像を確認した。
+- 既存の固定版公開DBからコースと「らっしゃい！トレセン軒！」のJSONだけを同梱。イベントのスキル反映はID付き報酬、またはスキル名と明示のヒントLvを一意に照合できる記録が対象。ランダム、複数解釈、資料のない報酬は詳細で確認する。
+- ローカル保存キーは `umaPlanner1`。既存フィールドを維持し、白ヒントLv、個別ヒントLv、覚醒Lvを追加。GitHub Actionsの実行用アクションはNode.js 24対応版に変更。
+- 開発プレビューは独立したSitesプロジェクトの `dist` へ開発ブランチの静的ファイルを同期し、保存済みバージョンを配信する。GitHub Pagesは別系統。
