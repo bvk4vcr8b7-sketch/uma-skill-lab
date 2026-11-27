@@ -89,35 +89,9 @@ function evolutionStatus(s){
   const unlock=Object.entries(parents).find(([,ids])=>ids.includes(rule.parent));
   if(unlock && Number(unlock[0])>Number($('awakening').value))return '条件未達';
   if(!parent)return s.pre?'取得不可':'判定不能';
-  const acquired=new Map(state.skills.filter(x=>active(x)&&x.selected&&x.type!=='進化').map(x=>[x.name,x]));
-  const groups=rule.groups.map(group=>group.map(([kind,key,count,threshold])=>{
-    if(kind==='skill'){const name=catalogSkills.get(key)?.name;if(!name)return null;return state.skills.some(x=>active(x)&&x.name===name&&x.selected)}
-    if(kind==='a_skill'){
-      const axis={strat:'styles',dist:'distances',trn:'grounds'}[key];
-      const tag={strat:['','nige','senko','sashi','oikomi'],dist:['short','mile','mid','long'],trn:['','turf','dirt']}[key]?.[count];
-      if(!axis||!tag)return null;
-      let matched=0, unknown=0;
-      for(const skill of acquired.values()){
-        const branches=skill.activation?.branches;
-        if(!branches?.length){unknown++;continue}
-        if(branches.every(b=>b[axis]?.length===1&&b[axis][0]===tag))matched++;
-      }
-      return matched>=threshold?true:matched+unknown<threshold?false:null;
-    }
-    if(kind==='e_skill'){
-      const effect={speed:'速度',accel:'加速',reco:'回復',green:'緑'}[key];
-      if(!effect)return null;
-      const known=[...acquired.values()].filter(x=>x.kind===effect).length;
-      const unknown=[...acquired.values()].filter(x=>!x.kind||['不明','複合'].includes(x.kind)).length;
-      return known>=count?true:known+unknown<count?false:null;
-    }
-    if(kind==='stat'||kind==='fan'){
-      const v=state.trainingFacts?.[kind==='fan'?'fan':key];return v==null||v===''?null:Number(v)>=(kind==='fan'?key:count);
-    }
-    return null;
-  }));
-  if(groups.some(g=>g.length&&g.every(v=>v===false)))return '条件未達';
-  return groups.length&&groups.every(g=>g.includes(true))?'取得可能':'判定不能';
+  const groups=trainingGroups(s);
+  if(groups.some(g=>g.length&&g.every(x=>x.ok===false)))return '条件未達';
+  return groups.length&&groups.every(g=>g.some(x=>x.ok===true))?'取得可能':'判定不能';
 }
 function acquisition(s){
   if(!active(s))return '取得不可';
@@ -134,6 +108,7 @@ function selectionReason(s){
   return '取得元：'+source+'。レース条件：'+status+'（'+condition+'）。自動選択：'+(autoEligible(s)?'対象':'除外')+($('autoMode').value==='course'?'（展開条件を除外）':'（展開条件付きも対象）')+(s.festival&&s.type==='進化'?'。シナリオ進化は先頭から最大2個':'');
 }
 function autoEligible(s){
+  if(typeof catalog!=='undefined'&&catalog){const kind=trainingType(s);if(kind==='緑'&&state.autoTargets?.green===false||kind==='回復'&&state.autoTargets?.heal===false)return false;}
   if(acquisition(s)!=='取得可能'||verdict(s)!=='条件適合')return false;
   if($('autoMode').value!=='course'||!s.skillId)return true;
   if(typeof catalogSkills==='undefined'||!catalogSkills)return false;
