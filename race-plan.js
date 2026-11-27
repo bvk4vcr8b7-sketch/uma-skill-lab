@@ -86,21 +86,6 @@ function evolutionStatus(s){
   if(groups.some(g=>g.length&&g.every(v=>v===false)))return '条件未達';
   return groups.length&&groups.every(g=>g.includes(true))?'取得可能':'判定不能';
 }
-function courseTimeline(skills){
-  const {d,geo}=raceContext();
-  const lane=(name,spans)=>'<p>'+esc(name)+'</p><div class="track">'+spans.map(([a,b])=>'<span class="bar" style="left:'+a/d*100+'%;width:max(2px,'+(b-a)/d*100+'%)"></span>').join('')+'</div>';
-  let result='序盤 0–'+Math.round(d/6)+'m ／ 中盤 –'+Math.round(d*2/3)+'m ／ 終盤 –'+d+'m';
-  if(geo){for(const [name,spans] of [['直線',geo.straights],['コーナー',geo.corners],['上り坂',geo.slopes.filter(x=>x[2]>0)],['下り坂',geo.slopes.filter(x=>x[2]<0)]])if(spans.length)result+=lane(name,spans);}
-  else result+='<p>コース形状未照合</p>';
-  for(const s of skills){
-    if(s.start!==''&&s.end!==''&&s.start!=null&&s.end!=null&&+s.start>=0&&+s.end>=+s.start&&+s.end<=d){result+=lane(s.name+' · 手動登録',[[+s.start,+s.end]]);continue}
-    const branches=skillBranches(s).filter(r=>r.spans.length);
-    if(!branches.length||branches.some(r=>r.unknown||!r.spatial))result+='<p>'+esc(s.name)+' · 区間判定不能</p>';
-    for(const r of branches.filter(r=>r.spatial&&!r.unknown))result+=lane(s.name+' · '+(r.random?'ランダム候補':r.spans.every(([a,b])=>a===b)?'固定位置':'発動可能区間')+(r.conditional?' · 順位・展開条件あり':'')+' '+r.spans.map(([a,b])=>Math.round(a)+'–'+Math.round(b)+'m').join(' / '),r.spans);
-  }
-  return result;
-}
-
 function acquisition(s){
   if(!active(s))return '取得不可';
   if(s.type!=='進化')return '取得可能';
