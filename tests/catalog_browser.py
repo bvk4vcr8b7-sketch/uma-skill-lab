@@ -67,9 +67,11 @@ with sync_playwright() as pw:
         assert skill_button.get_attribute('aria-pressed') == 'false'
         skill_button.click()
         assert skill_button.get_attribute('aria-pressed') == 'true'
+        page.get_by_role('button',name='設定',exact=True).click()
         page.get_by_text('編成データ・スキル検索', exact=True).click()
         page.fill('#catalogSkill', '右回り○')
         assert '90 Pt' in page.locator('#catalogSkillResults').text_content()
+        page.get_by_role('button',name='Pt計算機',exact=True).click()
         assert page.locator('.totals').evaluate("(el) => getComputedStyle(el).position") == 'fixed'
         assert page.evaluate('document.documentElement.scrollWidth === innerWidth')
         page.reload()

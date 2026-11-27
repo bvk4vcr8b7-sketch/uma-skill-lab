@@ -185,3 +185,5 @@ button.selectedImage:after{content:none}
 #skillInfo{max-width:min(92vw,520px);max-height:78vh;box-sizing:border-box;overflow:auto;border:1px solid #abc8b6;border-radius:8px;color:#233c30}
 #skillInfo form{float:right}#skillInfo dt{font-weight:700;margin-top:8px}#skillInfo dd{margin:1px 0;overflow-wrap:anywhere}
 @media(max-width:600px){.secondarySettings .grid{grid-template-columns:repeat(4,minmax(0,1fr))}.secondarySettings input{min-width:0;width:100%}.selectionBar label,.targetOptions label{font-size:11px}.selectionBar p{display:flex;gap:4px}.selectionBar button{font-size:12px;width:auto}.miniControls select{font-size:11px}.rewardLink{font-size:9px}.miniControls button{font-size:12px}.selectionBar input[type=checkbox]{min-height:16px;width:16px}.pinnedSettings #scenarioNotice{display:none}}
+
+.workspaceTabs{display:flex;gap:2px;flex-wrap:wrap;margin:0 0 5px}.workspaceTabs button{border:0;background:#e6eee9;color:#2c483a;font-size:12px;padding:5px 8px;width:auto;min-height:28px}.workspaceTabs button[aria-pressed=true]{background:#225b45;color:white}.workspacePane{min-width:0}
