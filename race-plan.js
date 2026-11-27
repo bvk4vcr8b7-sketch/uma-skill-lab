@@ -9,17 +9,35 @@ function raceContext(){
 function raceBranch(branch) {
   const {d,geo}=raceContext();
   const phase=[0,d/6,2*d/3,5*d/6,d];
-  const values={running_style:['','逃げ','先行','差し','追込'].indexOf(state.style),distance_type:['','短距離','マイル','中距離','長距離'].indexOf(state.distance),ground_type:state.surface==='芝'?1:2,rotation:{右:1,左:2,直線:4,直:4}[state.turn],season:['','春','夏','秋','冬'].indexOf(state.season),track_id:geo?.track,distance:d,is_basis_distance:Number(d%400===0)};
+  const values={running_style:['','逃げ','先行','差し','追込'].indexOf(state.style),distance_type:['','短距離','マイル','中距離','長距離'].indexOf(state.distance),ground_type:state.surface==='芝'?1:2,rotation:{右:1,左:2,直線:4,直:4}[state.turn],season:['','春','夏','秋','冬'].indexOf(state.season),track_id:geo?.track,course_distance:d,distance:d,is_basis_distance:Number(d%400===0)};
   let spans=[[0,d]], spatial=false, random=false, conditional=false, unknown=false;
   function clip(ranges){spatial=true;spans=spans.flatMap(([a,b])=>ranges.map(([c,e])=>[Math.max(a,c),Math.min(b,e)]).filter(([l,r])=>l<=r));}
   for(const token of branch.condition.split('&')){
-    const m=token.match(/^(\w+)(==|>=|<=|>|<)(-?\d+(?:\.\d+)?)$/);
+    const m=token.match(/^(\w+)(==|!=|>=|<=|>|<)(-?\d+(?:\.\d+)?)$/);
     if(!m){unknown=true;continue}
     const [,key,op]=m,n=Number(m[3]);
-    const pass=v=>({'==':v===n,'>=':v>=n,'<=':v<=n,'>':v>n,'<':v<n})[op];
+    const pass=v=>({'==':v===n,'!=':v!==n,'>=':v>=n,'<=':v<=n,'>':v>n,'<':v<n})[op];
     if(Object.hasOwn(values,key)){if(values[key]==null)unknown=true;else if(!pass(values[key]))spans=[];continue}
+    if(key==='always'&&op==='=='&&n===1)continue;
+    if(op==='==' && n>=0 && n<4 && /^phase_(firsthalf|laterhalf|firstquarter|straight|corner)(_random)?$/.test(key)){
+      const start=phase[n],end=phase[n+1],mid=(start+end)/2;
+      random ||= key.endsWith('_random');
+      if(key.includes('firsthalf'))clip([[start,mid]]);
+      else if(key.includes('laterhalf'))clip([[mid,end]]);
+      else if(key.includes('firstquarter'))clip([[start,start+(end-start)/4]]);
+      else{clip([[start,end]]);if(!geo)unknown=true;else clip(key.includes('straight')?geo.straights:geo.corners)}
+      continue;
+    }
+    if((key==='corner'&&n===0&&['==','!='].includes(op))||((key==='up_slope_random'||key==='down_slope_random'||key==='is_finalcorner_random')&&op==='=='&&n===1)){
+      if(!geo){unknown=true;continue}
+      random ||= key.endsWith('_random');
+      if(key==='corner')clip(op==='=='?geo.straights:geo.corners);
+      else if(key==='is_finalcorner_random')clip(geo.corners.slice(-1));
+      else clip(geo.slopes.filter(x=>key==='up_slope_random'?x[2]>0:x[2]<0));
+      continue;
+    }
     if(key==='phase'||(key==='phase_random'&&op==='==')){random ||= key.endsWith('random');clip([0,1,2,3].filter(pass).map(i=>[phase[i],phase[i+1]]));continue}
-    if(['distance_rate','remain_distance'].includes(key)){
+    if(op!=='!='&&['distance_rate','remain_distance'].includes(key)){
       const v=key==='distance_rate'?d*n/100:d-n;
       const lower=key==='distance_rate'?op.startsWith('>'):op.startsWith('<');
       clip([op==='=='?[v,v]:lower?[v,d]:[0,v]]);continue
@@ -29,15 +47,30 @@ function raceBranch(branch) {
       random ||= key.endsWith('random');
       clip(key==='straight_random'?geo.straights:key==='all_corner_random'?geo.corners:key==='is_last_straight'?geo.straights.slice(-1):geo.slopes.filter(x=>n===1?x[2]>0:x[2]<0));continue
     }
-    if(/^(order|order_rate|popularity|bashin_diff_infront|is_overtake)$/.test(key)){conditional=true;continue}
+    if(/^(order|order_rate|popularity|bashin_diff_infront|bashin_diff_behind|is_overtake|blocked_side_continuetime|blocked_front_continuetime|change_order_onetime|overtake_target_time|distance_diff_top|near_count|hp_per|compete_fight_count|activate_count_param_skill)$/.test(key)){conditional=true;continue}
     unknown=true;
   }
-  if(branch.precondition)unknown=true;
+  if(branch.precondition){
+    const alternatives=branch.precondition.split('@');
+    const staticOnly=alternatives.every(a=>a.split('&').every(t=>Object.hasOwn(values,t.split(/[<>=!]/)[0])));
+    if(staticOnly){const results=alternatives.map(condition=>raceBranch({condition}));if(results.every(x=>!x.spans.length))spans=[];else if(!results.some(x=>x.spans.length&&!x.unknown))unknown=true;}else unknown=true;
+  }
   return {spans,spatial,random,conditional,unknown};
 }
+function skillRecord(s){
+  const known=catalogSkills?.get(s.skillId);
+  if(known)return known;
+  const matches=catalog.skills.filter(x=>x.name===s.name);
+  return matches.length===1?matches[0]:null;
+}
 function skillBranches(s){
-  const info=catalogSkills?.get(s.skillId);
-  return (info?.branches||[]).flatMap(b=>b.condition.split('@').map(condition=>raceBranch({...b,condition})));
+  const info=skillRecord(s);
+  const passive=catalog.effectTypes?.[info?.id]==='passive';
+  return (info?.branches||[]).flatMap(b=>b.condition.split('@').map(condition=>{
+    const result=raceBranch({...b,condition});result.passive=passive;
+    if(!result.unknown&&(passive||result.conditional))result.spatial=true;
+    return result;
+  }));
 }
 function raceVerdict(s){
   const rows=skillBranches(s);

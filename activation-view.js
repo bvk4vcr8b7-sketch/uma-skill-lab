@@ -43,20 +43,20 @@ function activationChart(selectedSkills){
   for(const s of unique.values()){
     const kind=effectType(s);
     if(timelineOptions.kind!=='すべて'&&kind!==timelineOptions.kind)continue;
-    const raw=skillBranches(s).filter(r=>r.spans.length);
-    let spans=raw.filter(r=>r.spatial&&!r.unknown).flatMap(r=>r.spans.map(([a,b])=>({a,b,random:r.random,conditional:r.conditional})));
+    const branches=skillBranches(s);const impossible=branches.length>0&&branches.every(r=>!r.spans.length);const raw=branches.filter(r=>r.spans.length);
+    let spans=raw.filter(r=>r.spatial&&!r.unknown).flatMap(r=>r.spans.map(([a,b])=>({a,b,random:r.random,conditional:r.conditional,passive:r.passive})));
     if(s.start!==''&&s.end!==''&&s.start!=null&&s.end!=null&&+s.start>=0&&+s.start<=+s.end&&+s.end<=d)spans=[{a:+s.start,b:+s.end}];
     if(phase>=0&&!spans.some(({a,b})=>b>=bounds[phase]&&a<bounds[phase+1]))continue;
     if(timelineOptions.phase==='区間不明'&&spans.length)continue;
-    entries.push({s,kind,spans,first:Math.min(...spans.map(x=>x.a)),partial:raw.some(r=>!r.spatial||r.unknown)});
+    entries.push({s,kind,spans,impossible,first:Math.min(...spans.map(x=>x.a)),partial:raw.some(r=>!r.spatial||r.unknown)});
   }
   entries.sort((a,b)=>(timelineOptions.order==='種別順'?effectTypes.indexOf(a.kind)-effectTypes.indexOf(b.kind):0)||a.first-b.first||a.s.name.localeCompare(b.s.name,'ja'));
   html+='<small>発動候補位置　◆ 固定位置　斜線 ランダム候補　実線 条件区間</small>';
   html+='<div class="effectLegend">'+effectTypes.filter(k=>entries.some(e=>e.kind===k)).map(k=>'<span class="k'+effectTypes.indexOf(k)+'">'+k+'</span>').join('')+'</div>';
-  for(const {s,kind,spans,partial} of entries){
-    const text=spans.map(x=>(x.random?'ランダム候補':x.a===x.b?'固定位置':'条件区間')+' '+Math.round(x.a)+'–'+Math.round(x.b)+'m'+(x.conditional?'（順位・展開条件あり）':'')).join(' ／ ');
+  for(const {s,kind,spans,partial,impossible} of entries){
+    const text=spans.map(x=>(x.passive?'常時効果':x.random?'ランダム候補':x.a===x.b?'固定位置':'条件区間')+' '+Math.round(x.a)+'–'+Math.round(x.b)+'m'+(x.conditional?'（順位・展開条件あり）':'')).join(' ／ ');
     const details='<details><summary>'+esc(s.name)+'</summary>'+esc(kind+' · '+(text||'区間判定不能')+(partial?' · 未照合条件あり':'')+' '+(catalogSkills.get(s.skillId)?.conditionText||[]).join(' ／ '))+'</details>';
-    html+=row(details,spans.length?spans.map(x=>bar(x.a,x.b,'skillBand k'+effectTypes.indexOf(kind)+(x.random?' random':'')+(x.a===x.b?' point':''))).join(''):'<small>区間判定不能</small>');
+    html+=row(details,spans.length?spans.map(x=>bar(x.a,x.b,'skillBand k'+effectTypes.indexOf(kind)+(x.random?' random':'')+(x.a===x.b?' point':''),x.passive?'常時':'')).join(''):'<small>'+(impossible?'発動不可':'区間判定不能')+'</small>');
   }
   return html+(entries.length?'':'<small>該当スキルなし</small>');
 }

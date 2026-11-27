@@ -80,7 +80,7 @@ const catalogApply=dbApply;
 dbApply=function(){catalogApply();catalogDetails()};
 async function loadCatalog(){
   try{
-    const keys=['supports','characters','skills','events','stories','eventLinks','portraits','courses','toresenken','geometry','evolutionRules','effectTypes'];
+    const keys=['supports','characters','skills','events','stories','eventLinks','portraits','courses','toresenken','geometry','evolutionRules','effectTypes','extraBranches'];
     catalog=Object.fromEntries(await Promise.all(keys.map(async k=>[k,await getJSON('data/catalog/'+k+'.json')])));
     for(const [group,owners] of Object.entries(catalog.eventLinks)){
       const records=catalog.stories[group];
@@ -93,6 +93,7 @@ async function loadCatalog(){
     }
     catalogCards=new Map(catalog.supports.map(x=>[x.name,x]));
     catalogChars=new Map(catalog.characters.map(x=>[x.name,x]));
+    for(const skill of catalog.skills)if(!skill.branches?.length&&catalog.extraBranches[skill.id])skill.branches=catalog.extraBranches[skill.id];
     catalogSkills=new Map(catalog.skills.map(x=>[x.id,x]));
     dbSetup();
     $('catalogSkill').oninput=showCatalogSkill;
