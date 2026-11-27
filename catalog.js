@@ -27,6 +27,8 @@ function catalogMerge(key,records){
 }
 function applyCatalog(){
   if(!catalog)return;
+  rawDB['data/courses.json']??=catalog.courses;
+  rawDB['data/scenarios/toresenken.json']??=catalog.toresenken;
   catalogMerge('characters',catalog.characters);
   catalogMerge('supports',catalog.supports);
   catalogMerge('skills',catalog.skills);
@@ -67,6 +69,7 @@ function catalogDetails(){
 const originalCatalogImage=imageURL;
 imageURL=function(target,id){
   const row=(target==='dbChar'?catalog?.characters:catalog?.supports)?.find(x=>String(x.id)===String(id));
+  if(target!=='dbChar'&&Object.hasOwn(catalog?.portraits||{},id))return catalog.portraits[id];
   return row?.image||originalCatalogImage(target,id);
 };
 const catalogSetup=dbSetup;
@@ -75,7 +78,7 @@ const catalogApply=dbApply;
 dbApply=function(){catalogApply();catalogDetails()};
 async function loadCatalog(){
   try{
-    const keys=['supports','characters','skills','events','stories','eventLinks'];
+    const keys=['supports','characters','skills','events','stories','eventLinks','portraits','courses','toresenken'];
     catalog=Object.fromEntries(await Promise.all(keys.map(async k=>[k,await getJSON('data/catalog/'+k+'.json')])));
     for(const [group,owners] of Object.entries(catalog.eventLinks)){
       const records=catalog.stories[group];
