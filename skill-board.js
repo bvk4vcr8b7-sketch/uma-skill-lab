@@ -20,6 +20,7 @@ function renderSkillBoard(planned){
     if(selected&&status==='条件適合'&&skillBranches(s).some(r=>r.conditional))warnings.push('展開次第');
     const override=state.hintOverrides?.[skillHintKey(s)];
     const components=skillComponents(s),rating=courseGroup(s);
+    if(selected&&rating==='要確認')warnings.push('有効性要確認');
     const cls=own||s.type==='進化'?'evolved':gold?'gold':'';
     const level=s.type==='サポカ通常'?(state.whiteHint??5):s.hint??0;
     const html='<article class="skillEntry '+cls+(duplicate?' duplicate':'')+(warnings.length?' warnEntry':'')+'">'+

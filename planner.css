@@ -171,7 +171,7 @@ button.selectedImage:after{content:none}
 
 .selectionBar{display:flex;flex-wrap:wrap;align-items:center;gap:3px 8px;margin:5px 0;background:#f4f8f5;padding:4px}
 .selectionBar p,.selectionBar .targetOptions{margin:0}.targetOptions strong{font-size:12px}
-.secondarySettings .grid{grid-template-columns:2fr repeat(7,minmax(0,1fr));gap:4px}
+.secondarySettings .grid{grid-template-columns:2fr repeat(6,minmax(0,1fr));gap:4px}
 .supportEvents{margin:4px 0}.eventGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:4px}
 .eventGrid section{margin:0;padding:5px}.eventGrid h3{font-size:12px;margin:0}
 .rewardLink,.infoButton{background:#f4f7f5;color:#18543f;padding:1px 2px;font-size:11px;min-height:24px;margin:0}

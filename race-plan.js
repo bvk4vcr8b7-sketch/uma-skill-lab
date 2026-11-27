@@ -47,6 +47,14 @@ function raceBranch(branch) {
       random ||= key.endsWith('random');
       clip(key==='straight_random'?geo.straights:key==='all_corner_random'?geo.corners:key==='is_last_straight'?geo.straights.slice(-1):geo.slopes.filter(x=>n===1?x[2]>0:x[2]<0));continue
     }
+    if(key==='distance_rate_after_random'&&op==='=='&&n>=0&&n<=100){random=true;clip([[d*n/100,d]]);continue}
+    if(key==='is_lastspurt'&&op==='=='&&n===1){conditional=true;clip([[phase[2],d]]);continue}
+    if(key==='is_finalcorner'&&op==='=='&&n===1){if(geo)clip(geo.corners.slice(-1));else unknown=true;continue}
+    if(key==='activate_count_middle'&&((op==='>='&&n>0)||(op==='>'&&n>=0))){
+      conditional=true;clip([[phase[1],d]]);continue;
+    }
+    // Race-dependent facts leave the possible window conditional.
+    if(/^(activate_count_(start|middle|end_after|all|heal)|running_style_count_(nige|senko|sashi|oikomi)_otherself|infront_near_lane_time|behind_near_lane_time|is_move_lane|is_badstart|change_order_up_end_after|is_surrounded|is_behind_in|accumulatetime|random_lot|distance_diff_top_float|distance_diff_rate|temptation_count|is_other_character_activate_advantage_skill)$/.test(key)){conditional=true;continue}
     if(key==='order'){
       const fieldSize=state.racePreset==='loh202611'?12:state.racePreset==='cm202612'?9:null;
       if(fieldSize&&!Array.from({length:fieldSize},(_,i)=>i+1).some(pass))spans=[];
@@ -56,8 +64,13 @@ function raceBranch(branch) {
   }
   if(branch.precondition){
     const alternatives=branch.precondition.split('@');
-    const staticOnly=alternatives.every(a=>a.split('&').every(t=>Object.hasOwn(values,t.split(/[<>=!]/)[0])));
-    if(staticOnly){const results=alternatives.map(condition=>raceBranch({condition}));if(results.every(x=>!x.spans.length))spans=[];else if(!results.some(x=>x.spans.length&&!x.unknown))unknown=true;}else unknown=true;
+    const results=alternatives.map(condition=>raceBranch({condition}));
+    const possible=results.filter(x=>x.spans.length);
+    if(!possible.length)spans=[];
+    else if(!possible.some(x=>!x.unknown))unknown=true;
+    // A prerequisite can occur earlier. Its interval does not bound the subsequent effect.
+    conditional ||= possible.some(x=>x.conditional||x.spatial);
+
   }
   return {spans,spatial,random,conditional,unknown};
 }
@@ -105,14 +118,19 @@ function acquisition(s){
 function selectionReason(s){
   const available=acquisition(s);
   const source=s.owner||s.source||s.type;
+  if(selfEvolution(s)&&autoEvolution(s)&&available!=='取得可能')return '取得予定候補。進化元 '+s.pre+'。育成条件：'+available+'。レース条件：'+verdict(s);
   if(available!=='取得可能')return '取得：'+available+'。'+(s.blockedReason||(s.pre?'進化元 '+s.pre+'・覚醒・育成実績を確認':'現在の編成・取得元の対象外'));
   const status=verdict(s);
   const catalogInfo=typeof catalogSkills==='undefined'?null:catalogSkills?.get(s.skillId);
   const condition=s.condition||catalogInfo?.branches?.map(b=>[b.precondition,b.condition].filter(Boolean).join(' → ')).join(' ／ ')||'条件資料なし';
-  return '取得元：'+source+'。レース条件：'+status+'（'+condition+'）。自動選択：'+(autoEligible(s)?'対象':'除外')+($('autoMode').value==='course'?'（展開条件を除外）':'（展開条件付きも対象）')+(s.festival&&s.type==='進化'?'。シナリオ進化は先頭から最大2個':'');
+  return '取得元：'+source+'。レース条件：'+status+'（'+condition+'）。自動選択：'+(autoEligible(s)?'対象':'除外')+(s.type==='進化'||skillRecord(s)?.rarity===2?'（展開条件付きも対象）':$('autoMode').value==='course'?'（展開条件を除外）':'（展開条件付きも対象）')+(s.festival&&s.type==='進化'?'。シナリオ進化は先頭から最大2個':'');
 }
 function autoEvolution(s){
-  return selfEvolution(s)&&active(s)&&!!catalog.evolutionRules[s.skillId]?.parent&&courseGroup(s)==='適合';
+  return selfEvolution(s)&&active(s)&&!!catalog.evolutionRules[s.skillId]?.parent&&
+    state.skills.some(x=>active(x)&&x.name===s.pre)&&canRace(s);
+}
+function canRace(s){
+  return ['条件適合','終盤前・要確認'].includes(verdict(s));
 }
 function courseGroup(s){
   const status=verdict(s);
@@ -127,6 +145,8 @@ function courseGroup(s){
   return '適合';
 }
 function autoEligible(s,ignoreCategories=false){
+  if(selfEvolution(s))return autoEvolution(s);
+  if(s.type==='進化'||(typeof catalog!=='undefined'&&catalog&&skillRecord(s)?.rarity===2))return acquisition(s)==='取得可能'&&canRace(s);
   if(!ignoreCategories&&typeof catalog!=='undefined'&&catalog){const kind=trainingType(s);if(state.autoTargets?.[kind==='緑'?'green':kind==='回復'?'heal':'other']===false)return false;}
   if(acquisition(s)!=='取得可能'||verdict(s)!=='条件適合')return false;
   if(courseGroup(s)!=='適合')return false;

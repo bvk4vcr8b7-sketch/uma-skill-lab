@@ -1,4 +1,5 @@
 from playwright.sync_api import sync_playwright
+from auto_button import check_auto_button
 import os
 import subprocess
 
@@ -199,4 +200,9 @@ with sync_playwright() as pw:
         assert page.evaluate("state.factorSlots[0]") == factor_id
         assert not errors, errors
         page.close()
+    page=browser.new_page()
+    page.route('https://**/*',lambda route:route.abort())
+    page.goto('http://127.0.0.1:8765/')
+    page.wait_for_function("document.getElementById('catalogStatus').textContent.includes('568')")
+    check_auto_button(page)
     browser.close()

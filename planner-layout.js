@@ -116,7 +116,10 @@ for (const [key, name] of [[1,'スピード'],[2,'スタミナ'],[3,'パワー']
     render();
   };
   field.append(input);
-  settingsFields.append(field);
+  if(key==='fan'){
+    const details=document.createElement('details');
+    details.innerHTML='<summary>育成実績の詳細</summary>';details.append(field);secondary.append(details);
+  }else settingsFields.append(field);
 }
 setupGrid.after(secondary);
 
@@ -162,4 +165,5 @@ for(let i=0;i<6;i++){
 const actionBar=document.createElement('div');
 actionBar.className='selectionBar';
 setupSection.insertBefore(actionBar,strip);
+$('autoMode').querySelector('option[value="course"]').textContent='展開条件を除く（金・進化は含む）';
 actionBar.append(options,$('autoMode').closest('label'),plan.querySelector('p:has(button)'));
