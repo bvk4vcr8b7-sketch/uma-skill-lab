@@ -21,29 +21,25 @@ jobs:
         run: |
           python -m http.server 8765 --bind 127.0.0.1 &
           python tests/catalog_browser.py
-  inspect-event-data:
+  import-trainee-events:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/dev/jp-data-catalog'
     runs-on: ubuntu-24.04
+    permissions:
+      contents: write
     steps:
+      - uses: actions/checkout@v4
       - uses: actions/checkout@v4
         with:
           repository: Cilda/UmaUmaChecker
           ref: 42da047b02dca0282f5fa6500cdca9880656b891
+          path: upstream
           sparse-checkout: UmaUmaChecker/Library
           persist-credentials: false
-      - name: Inspect character event data
+      - run: python scripts/import_trainee_events.py upstream/UmaUmaChecker/Library/Chara.json
+      - name: Register verified trainee events on the development branch
         run: |
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          data=json.loads(Path('UmaUmaChecker/Library/Chara.json').read_text())
-          for _ in range(6):
-              if isinstance(data,dict):
-                  print(list(data)[:3],len(data))
-                  data=next(iter(data.values()))
-              elif isinstance(data,list):
-                  print('list',len(data))
-                  data=data[0]
-              else:
-                  print(str(data)[:80])
-                  break
-          PY
+          git add data/catalog/stories.json
+          if ! git diff --cached --quiet; then
+            git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m '育成衣装の選択肢・報酬を追加照合'
+            git push origin HEAD:dev/jp-data-catalog
+          fi
