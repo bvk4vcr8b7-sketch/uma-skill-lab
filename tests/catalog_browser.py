@@ -172,6 +172,24 @@ with sync_playwright() as pw:
                 document.querySelectorAll('.deckSlot .cardSkills').length===6 &&
                 document.documentElement.scrollWidth===innerWidth;
         }""")
+        page.get_by_role('button',name='因子台帳',exact=True).click()
+        page.fill('#factorName','台帳回帰')
+        page.locator('.traitRow input').fill('右回り○')
+        page.locator('.traitRow select').last.select_option('3')
+        page.locator('#saveFactor').click()
+        factor_id=page.locator('#factorList').input_value()
+        assert factor_id
+        page.get_by_role('button',name='Pt計算機',exact=True).click()
+        page.locator('.inheritance summary').click()
+        page.locator('.inheritance select').first.select_option(factor_id)
+        assert page.evaluate("state.skills.some(s=>s.factorRef&&s.name==='右回り○'&&hint(s)===0)")
+        page.get_by_role('button',name='出走ウマ娘管理',exact=True).click()
+        page.fill('#runnerName','比較個体')
+        page.locator('#runnerSave').click()
+        assert page.get_by_text('比較個体',exact=True).is_visible()
+        page.locator('#runnerOpen').click()
+        page.wait_for_function("document.getElementById('catalogStatus').textContent.includes('568')")
+        assert page.evaluate("state.factorSlots[0]") == factor_id
         assert not errors, errors
         page.close()
     browser.close()

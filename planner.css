@@ -187,3 +187,6 @@ button.selectedImage:after{content:none}
 @media(max-width:600px){.secondarySettings .grid{grid-template-columns:repeat(4,minmax(0,1fr))}.secondarySettings input{min-width:0;width:100%}.selectionBar label,.targetOptions label{font-size:11px}.selectionBar p{display:flex;gap:4px}.selectionBar button{font-size:12px;width:auto}.miniControls select{font-size:11px}.rewardLink{font-size:9px}.miniControls button{font-size:12px}.selectionBar input[type=checkbox]{min-height:16px;width:16px}.pinnedSettings #scenarioNotice{display:none}}
 
 .workspaceTabs{display:flex;gap:2px;flex-wrap:wrap;margin:0 0 5px}.workspaceTabs button{border:0;background:#e6eee9;color:#2c483a;font-size:12px;padding:5px 8px;width:auto;min-height:28px}.workspaceTabs button[aria-pressed=true]{background:#225b45;color:white}.workspacePane{min-width:0}
+
+.traitRow,.ocrRow{display:grid;grid-template-columns:minmax(54px,1fr) minmax(0,3fr) minmax(52px,1fr) 40px;gap:4px;margin:4px 0}.traitRow input,.ocrRow input{min-width:0}
+.dropArea{border:1px dashed #659779;padding:10px;background:#f2f8f3}.dropArea input{display:block;margin:5px 0}.ocrRow{grid-template-columns:24px minmax(0,3fr) 70px 55px}.ocrRow small{grid-column:2/-1}.inheritance{margin:4px 0}

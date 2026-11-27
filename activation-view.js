@@ -39,6 +39,7 @@ function activationChart(selectedSkills){
   }else html+=row('コース','形状未照合');
   const skills=timelineOptions.selected?[...selectedSkills]:state.skills.filter(s=>active(s)&&acquisition(s)!=='取得不可');
   const unique=new Map(skills.map(s=>[s.name,s]));
+  if(timelineOptions.selected)for(const s of skills){if(s.type==='進化'&&s.pre)unique.delete(s.pre);const lower=lowerStage(s);if(lower)unique.delete(lower.name)}
   const phase=phases.indexOf(timelineOptions.phase),entries=[];
   for(const s of unique.values()){
     const kind=effectType(s);
