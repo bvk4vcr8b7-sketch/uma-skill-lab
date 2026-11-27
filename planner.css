@@ -93,3 +93,19 @@ button.selectedImage:after{content:none}
  .skillName{display:block;min-height:32px}
  .stats div{padding:2px 4px}
 }
+@media(max-width:600px){
+ .deckStrip{grid-template-columns:repeat(6,minmax(0,1fr));overflow-x:clip}
+ .deckSlot > select{padding-inline:1px}
+ .setup{overflow-wrap:anywhere}
+}
+@media(max-width:600px){
+ .setup label,.setup .traineeControl{overflow:hidden;grid-template-columns:minmax(0,1fr)}
+ .setup select{text-overflow:ellipsis}
+}
+
+@media(max-width:600px){
+ .plan > p:has(button){display:flex;gap:5px}
+ .plan > p > button{width:auto;min-height:34px;flex:1}
+ .plan > p > button:first-child{flex:2}
+ .traineeControl .selectedImage span{font-size:12px;text-overflow:ellipsis;white-space:nowrap;display:block;min-height:0}
+}

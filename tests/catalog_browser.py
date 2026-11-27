@@ -77,6 +77,53 @@ with sync_playwright() as pw:
         assert page.evaluate("state.skills.some(x => x.name === '手入力の回帰確認' && x.selected)")
         assert page.evaluate("state.skills.some(x => x.name === '純真無垢')")
         assert page.locator('#dbChar').input_value() == '107501'
+        # A saved public cache can use a different spelling for wisdom.
+        page.evaluate("""() => {
+            rawDB['data/supports.json'].find(c => c.id === 30289).type = 'intelligence';
+            dbSetup();
+        }""")
+        page.locator('#previewdbCard0').click()
+        for kind in ['speed','stamina','power','guts','wisdom','friend','group']:
+            page.evaluate("(kind) => {filters.type.value=kind;drawPicker()}", kind)
+            assert page.locator('#pickerGrid button span').all_text_contents() == page.evaluate(
+                "(kind) => catalog.supports.filter(c => c.type===kind).map(c=>c.name+' / '+c.rarity)", kind)
+        page.evaluate("filters.type.value='wisdom';drawPicker()")
+        page.fill('#pickerSearch','フォーエバーヤング')
+        assert page.locator('#pickerGrid button').filter(has_text='フォーエバーヤング').count() == 2
+        page.get_by_role('button', name='閉じる', exact=True).click()
+        page.select_option('#dbCourse','10606')
+        page.select_option('#style','先行')
+        page.get_by_role('button', name='条件に合う候補を選択').click()
+        assert page.evaluate("state.skills.some(x=>x.name==='先行直線○' && x.selected)")
+        assert 'ランダム候補' in page.locator('#courseTimeline').text_content()
+        assert '上り坂' in page.locator('#courseTimeline').text_content()
+        page.select_option('#style','差し')
+        page.get_by_role('button', name='条件に合う候補を選択').click()
+        assert not page.evaluate("state.skills.some(x=>x.name==='先行直線○' && x.selected)")
+        assert page.evaluate("state.skills.filter(s=>s.type==='進化'&&s.selected).every(s=>evolutionStatus(s)==='取得可能')")
+        assert page.evaluate("raceBranch({condition:'remain_distance==200'}).spans[0][0]===2200")
+        assert page.evaluate("raceBranch({condition:'unverified_condition==1'}).unknown")
+        assert page.evaluate("document.documentElement.scrollWidth===innerWidth")
+        if width < 500:
+            assert not page.locator('.secondarySettings').evaluate("el=>el.open")
+            assert page.locator('.deckSlot').last.bounding_box()['y'] == page.locator('.deckSlot').first.bounding_box()['y']
+        page.evaluate("$('dbChar').value='100101';$('dbChar').onchange()")
+        # Real skill 100101311 requires awakening 7 and four skills of either strategy.
+        statuses = page.evaluate("""() => {
+            const evo = state.skills.find(s => s.skillId === 100101311);
+            const results = [evolutionStatus(evo)];
+            $('awakening').value='7';dbApply();
+            const current=state.skills.find(s=>s.skillId===100101311);
+            clearSel();
+            results.push(evolutionStatus(current));
+            for(let i=0;i<4;i++)state.skills.push({
+                name:'代替条件テスト'+i,type:'因子',selected:true,
+                activation:{branches:[{styles:['sashi']}]}
+            });
+            results.push(evolutionStatus(current));
+            return results;
+        }""")
+        assert statuses == ['条件未達','条件未達','取得可能'], statuses
         assert not errors, errors
         page.close()
     browser.close()

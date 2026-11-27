@@ -17,7 +17,7 @@ let catalog, catalogSkills, catalogCards, catalogChars;
 const catalogKey = name => name.replace(/\s/g,'').replace(/[【［]/g,'[').replace(/[】］]/g,']');
 function catalogMerge(key,records){
   const path='data/'+key+'.json';
-  const merged=new Map(records.map(x=>[String(x.id),x]));
+  const merged=new Map(records.map(x=>[String(x.id),{...x}]));
   for(const x of rawDB[path]||[]){
     if(String(x.id).startsWith('local-') && records.some(r=>catalogKey(r.name)===catalogKey(x.name)))continue;
     const base=merged.get(String(x.id));

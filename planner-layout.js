@@ -118,3 +118,6 @@ for (const [key, name] of [[1,'スピード'],[2,'スタミナ'],[3,'パワー']
   settingsFields.append(field);
 }
 setupGrid.after(secondary);
+
+const dataTools = $('dbstatus').closest('details');
+document.querySelector('main').append(dataTools);

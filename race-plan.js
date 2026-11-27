@@ -9,7 +9,7 @@ function raceContext(){
 function raceBranch(branch) {
   const {d,geo}=raceContext();
   const phase=[0,d/6,2*d/3,5*d/6,d];
-  const values={running_style:['','逃げ','先行','差し','追込'].indexOf(state.style),distance_type:['','短距離','マイル','中距離','長距離'].indexOf(state.distance),ground_type:state.surface==='芝'?1:2,rotation:{右:1,左:2,直線:4}[state.turn],season:['','春','夏','秋','冬'].indexOf(state.season),track_id:geo?.track,distance:d,is_basis_distance:Number(d%400===0)};
+  const values={running_style:['','逃げ','先行','差し','追込'].indexOf(state.style),distance_type:['','短距離','マイル','中距離','長距離'].indexOf(state.distance),ground_type:state.surface==='芝'?1:2,rotation:{右:1,左:2,直線:4,直:4}[state.turn],season:['','春','夏','秋','冬'].indexOf(state.season),track_id:geo?.track,distance:d,is_basis_distance:Number(d%400===0)};
   let spans=[[0,d]], spatial=false, random=false, conditional=false, unknown=false;
   function clip(ranges){spatial=true;spans=spans.flatMap(([a,b])=>ranges.map(([c,e])=>[Math.max(a,c),Math.min(b,e)]).filter(([l,r])=>l<=r));}
   for(const token of branch.condition.split('&')){
