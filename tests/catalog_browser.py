@@ -13,11 +13,13 @@ with sync_playwright() as pw:
   print(page.locator('#catalogStatus').inner_text(),errors)
   assert page.locator('#dbCard0 option').count()==569
   assert page.locator('#dbChar option').count()==275
-  page.select_option('#dbCard0','30324')
-  page.select_option('#dbChar','107501')
+  for target, name in [('dbCard0','馳せて奪うは映山紅'),('dbChar','白光のレガリア')]:
+   page.locator('#preview'+target).click()
+   page.fill('#pickerSearch',name)
+   page.locator('#pickerGrid button').first.click()
   assert '静寂を裂いて' in page.locator('#catalogDetails').text_content()
   assert '万策尽きてなお' in page.locator('#catalogDetails').text_content()
-  page.evaluate("openPicker('dbCard1')")
+  page.locator('#previewdbCard1').click()
   page.fill('#pickerSearch','2026-11-10')
   assert page.locator('#pickerGrid button').count()==2
   page.locator('#pickerGrid button').first.click()
