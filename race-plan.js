@@ -47,6 +47,10 @@ function raceBranch(branch) {
       random ||= key.endsWith('random');
       clip(key==='straight_random'?geo.straights:key==='all_corner_random'?geo.corners:key==='is_last_straight'?geo.straights.slice(-1):geo.slopes.filter(x=>n===1?x[2]>0:x[2]<0));continue
     }
+    if(key==='order'){
+      const fieldSize=state.racePreset==='loh202611'?12:state.racePreset==='cm202612'?9:null;
+      if(fieldSize&&!Array.from({length:fieldSize},(_,i)=>i+1).some(pass))spans=[];
+    }
     if(/^(order|order_rate|popularity|bashin_diff_infront|bashin_diff_behind|is_overtake|blocked_side_continuetime|blocked_front_continuetime|change_order_onetime|overtake_target_time|distance_diff_top|near_count|hp_per|compete_fight_count|activate_count_param_skill)$/.test(key)){conditional=true;continue}
     unknown=true;
   }
@@ -107,8 +111,8 @@ function selectionReason(s){
   const condition=s.condition||catalogInfo?.branches?.map(b=>[b.precondition,b.condition].filter(Boolean).join(' → ')).join(' ／ ')||'条件資料なし';
   return '取得元：'+source+'。レース条件：'+status+'（'+condition+'）。自動選択：'+(autoEligible(s)?'対象':'除外')+($('autoMode').value==='course'?'（展開条件を除外）':'（展開条件付きも対象）')+(s.festival&&s.type==='進化'?'。シナリオ進化は先頭から最大2個':'');
 }
-function autoEligible(s){
-  if(typeof catalog!=='undefined'&&catalog){const kind=trainingType(s);if(kind==='緑'&&state.autoTargets?.green===false||kind==='回復'&&state.autoTargets?.heal===false)return false;}
+function autoEligible(s,ignoreCategories=false){
+  if(!ignoreCategories&&typeof catalog!=='undefined'&&catalog){const kind=trainingType(s);if(state.autoTargets?.[kind==='緑'?'green':kind==='回復'?'heal':'other']===false)return false;}
   if(acquisition(s)!=='取得可能'||verdict(s)!=='条件適合')return false;
   if($('autoMode').value!=='course'||!s.skillId)return true;
   if(typeof catalogSkills==='undefined'||!catalogSkills)return false;

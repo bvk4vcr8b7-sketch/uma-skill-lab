@@ -59,6 +59,7 @@ with sync_playwright() as pw:
         assert page.locator('#budget').input_value() == '8765'
         assert page.evaluate("cost(state.skills.find(x => x.name === '手入力の回帰確認'), 0)") == before
         page.fill('#q', '手入力の回帰確認')
+        page.locator('#rows .skillEntry summary').click()
         page.locator('#rows select').select_option('5')
         assert page.evaluate("cost(state.skills.find(x => x.name === '手入力の回帰確認'), 0)") == 72
         skill_button = page.get_by_role('button', name='手入力の回帰確認')
@@ -148,6 +149,21 @@ with sync_playwright() as pw:
         page.get_by_role('button', name='条件に合う候補を選択').click()
         assert page.evaluate("state.skills.filter(s=>s.selected).every(s=>autoEligible(s))")
         assert page.locator('#courseTimeline .axisTick').count()==5
+        page.select_option('#dbChar','101703',force=True)
+        page.locator('select').filter(has=page.locator('option[value="loh202611"]')).select_option('loh202611',force=True)
+        page.select_option('#style','差し')
+        assert page.evaluate("""() => {
+            clearSel();
+            const i=state.skills.findIndex(s=>s.skillId===101703211), evo=state.skills[i];
+            if(!selfEvolution(evo)||!planAllowed(evo))return false;
+            toggleSkill(i,true);
+            return evo.selected && raceNeeds(evo).some(r=>r.need===7) &&
+                !trainingGroups(evo).flat().some(x=>x.req?.need===7) &&
+                verdict(state.skills.find(x=>x.name==='気炎万丈'))==='条件不一致' &&
+                verdict(state.skills.find(x=>x.name==='大望は煌めきとなりて'))!=='条件不一致' &&
+                document.querySelectorAll('.deckSlot .cardSkills').length===6 &&
+                document.documentElement.scrollWidth===innerWidth;
+        }""")
         assert not errors, errors
         page.close()
     browser.close()

@@ -131,3 +131,40 @@ button.selectedImage:after{content:none}
 .effectLegend{display:flex;flex-wrap:wrap;gap:3px 12px;margin:3px 0}
 .effectLegend span{font-size:12px}
 .effectLegend span:before{content:'';display:inline-block;width:.8em;height:.5em;background:var(--effect);margin-right:3px}
+
+.pinnedSettings{position:sticky;top:0;z-index:9;background:#f8fbf9;border-bottom:1px solid #a6c7b7;padding:4px}
+.pinnedSettings .grid{grid-template-columns:repeat(8,minmax(0,1fr));gap:4px}
+.deckStrip{overflow:visible}
+.deckSlot{min-width:0;align-content:start}
+.cardSkills,.sourceGroup{background:white;border:1px solid #c8d8ce;border-radius:4px}
+.cardSkills:empty{display:none}
+.skillEntry{position:relative;border-bottom:1px solid #dbe6df;padding:1px 3px;color:#203c30}
+.skillEntry:last-child{border-bottom:0}
+.skillEntry .skillName{display:block;font-size:13px;line-height:1.22;text-align:left;width:100%;padding:3px 1px;margin:0;border-radius:3px;min-height:26px;overflow-wrap:anywhere}
+.skillName b{font-variant-numeric:tabular-nums;white-space:nowrap}
+.skillEntry.gold{border-inline-start:3px solid #bd8724;background:#fff4d3}
+.skillEntry.duplicate{color:#68766d;background:#edf0ee}
+.skillEntry.outside .skillName{text-decoration:underline dotted #ae6736}
+.entryWarning{display:block;color:#80490c;font-size:11px}
+.skillEntry details{margin:0}
+.skillEntry summary{font-size:11px;color:#506959;line-height:1.2;padding:2px}
+.entryDetail{background:#fff;border:1px solid #afc7b8;box-shadow:0 3px 12px #254f3633;padding:6px;font-size:13px;overflow-wrap:anywhere}
+.entryDetail label{display:block}
+.entryDetail p{margin:4px 0}
+.cardSkills .entryDetail{position:absolute;inset-inline-start:0;width:min(200px,64vw);z-index:7}
+.deckSlot:nth-child(n+4) .entryDetail{inset-inline-start:auto;inset-inline-end:0}
+#rows{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:5px;align-items:start}
+.sourceGroup{margin:0;padding:0}
+.sourceGroup h3{background:#456553;color:#fff;font-size:13px;margin:0;padding:3px 5px}
+.targetOptions label{display:inline-flex;align-items:center;gap:3px;padding:3px}
+@media(max-width:600px){
+ .pinnedSettings .grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:2px}
+ .pinnedSettings label,.pinnedSettings .traineeControl{font-size:11px;gap:0;overflow:hidden}
+ .pinnedSettings select,.pinnedSettings input{font-size:16px;min-height:28px;padding:2px}
+ .deckStrip{gap:2px;overflow:visible}
+ .skillEntry{padding:1px}
+ .skillEntry .skillName{font-size:11px;min-height:26px}
+ .skillEntry summary{font-size:10px}
+ .eventSlot label{font-size:10px}
+ #rows{grid-template-columns:repeat(2,minmax(0,1fr))}
+}

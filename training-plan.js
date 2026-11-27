@@ -10,7 +10,8 @@ function selectedTrainingSkills(){
     if(name)visit(state.skills.find(x=>active(x)&&x.name===name)||(lower&&{name:lower.name,skillId:lower.id,type:'前提'}));
   }
   state.skills.filter(s=>active(s)&&s.selected).forEach(visit);
-  return [...found.values()].filter(x=>x.type!=='進化');
+  const replaced=new Set([...found.values()].map(x=>lowerStage(x)?.name).filter(Boolean));
+  return [...found.values()].filter(x=>x.type!=='進化'&&!replaced.has(x.name));
 }
 function trainingType(s){
   if(s.kind&&s.kind!=='不明')return s.kind;
@@ -53,7 +54,8 @@ function trainingGroups(s){
       return {ok:v==null||v===''?null:Number(v)>=need,label:(fan?'ファン数':['','スピード','スタミナ','パワー','根性','賢さ'][id])+' '+need+'以上（'+(v??'未入力')+'）'};
     }
     const key=[s.owner,s.skillId,g,i].join('|');
-    return {key,ok:state.evoConfirm?.[key]||null,label:'育成中の条件 '+r.join(' ')};
+    const kind={win:'対象レース勝利',win_all:'指定レース全勝',ev:'指定イベント',fan:'ファン数',participate:'対象レース出走'}[r[0]]||'育成実績';
+    return {key,ok:state.evoConfirm?.[key]||null,label:kind+'（資料コード '+r.join(' ')+ '）'};
   }));
 }
 function raceNeeds(s){
@@ -74,7 +76,7 @@ function planDetails(s){
 function fillRequirement(req,trainingOnly=false){
   const selected=selectedTrainingSkills(),names=new Set(selected.map(s=>s.name));
   let gap=assess(req,selected).gap;
-  const pool=state.skills.filter(x=>x.type!=='進化'&&active(x)&&(autoEligible(x)||trainingOnly&&verdict(x)==='条件不一致')&&req.match(x)===true)
+  const pool=state.skills.filter(x=>x.type!=='進化'&&active(x)&&(autoEligible(x,true)||trainingOnly&&verdict(x)==='条件不一致')&&req.match(x)===true)
     .sort((a,b)=>(cost(a,0)??Infinity)-(cost(b,0)??Infinity));
   for(const x of pool){if(!gap)break;if(names.has(x.name))continue;x.selected=true;names.add(x.name);gap--}
 }

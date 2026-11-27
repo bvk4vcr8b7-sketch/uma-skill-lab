@@ -121,3 +121,27 @@ setupGrid.after(secondary);
 
 const dataTools = $('dbstatus').closest('details');
 document.querySelector('main').append(dataTools);
+
+const board = document.createElement('div');
+board.id = 'rows';
+plan.querySelector('.scroll').replaceWith(board);
+for (const [i, slot] of [...strip.children].entries()) {
+  const list=document.createElement('div');
+  list.id='cardSkills'+i;
+  list.className='cardSkills';
+  slot.append(list);
+}
+board.parentNode.id='skillGroupsReady';
+const pinned=document.createElement('div');
+pinned.className='pinnedSettings';
+setupSection.before(pinned);
+pinned.append(setupGrid);
+const options=document.createElement('details');
+options.className='targetOptions';
+const title=document.createElement('summary');title.textContent='自動選択の対象';options.append(title);
+for (const [key,label,initial] of [['other','その他の適合スキル',true],['green','適合する緑',true],['heal','適合する回復',true],['training','予定した進化に必要なスキル',false],['raceNeeds','レース中の発動・強化に必要な候補',false]]) {
+  const wrap=document.createElement('label'),input=document.createElement('input');input.type='checkbox';input.checked=state.autoTargets?.[key]??initial;
+  input.onchange=()=>{(state.autoTargets??={})[key]=input.checked;save()};
+  wrap.append(input,label);options.append(wrap);
+}
+plan.querySelector('p:has(button)').before(options);
