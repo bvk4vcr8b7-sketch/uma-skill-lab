@@ -111,10 +111,26 @@ function selectionReason(s){
   const condition=s.condition||catalogInfo?.branches?.map(b=>[b.precondition,b.condition].filter(Boolean).join(' → ')).join(' ／ ')||'条件資料なし';
   return '取得元：'+source+'。レース条件：'+status+'（'+condition+'）。自動選択：'+(autoEligible(s)?'対象':'除外')+($('autoMode').value==='course'?'（展開条件を除外）':'（展開条件付きも対象）')+(s.festival&&s.type==='進化'?'。シナリオ進化は先頭から最大2個':'');
 }
+function autoEvolution(s){
+  return selfEvolution(s)&&active(s)&&!!catalog.evolutionRules[s.skillId]?.parent&&courseGroup(s)==='適合';
+}
+function courseGroup(s){
+  const status=verdict(s);
+  if(status==='条件不一致')return '条件外';
+  if(status==='判定保留')return '判定保留';
+  if(status==='終盤前・要確認')return '要確認';
+  const record=skillRecord(s),kinds=catalog.components?.get(record?.id)||[];
+  if(kinds.length===1&&kinds[0]==='acceleration'){
+    const valid=skillBranches(s).filter(b=>b.spans.length);
+    if(valid.length&&valid.every(b=>!b.unknown&&b.spatial&&b.spans.every(([,end])=>end<2*Number(state.meters)/3)))return '要確認';
+  }
+  return '適合';
+}
 function autoEligible(s,ignoreCategories=false){
   if(!ignoreCategories&&typeof catalog!=='undefined'&&catalog){const kind=trainingType(s);if(state.autoTargets?.[kind==='緑'?'green':kind==='回復'?'heal':'other']===false)return false;}
   if(acquisition(s)!=='取得可能'||verdict(s)!=='条件適合')return false;
-  if($('autoMode').value!=='course'||!s.skillId)return true;
+  if(courseGroup(s)!=='適合')return false;
+  if(s.type==='進化'||skillRecord(s)?.rarity===2||$('autoMode').value!=='course'||!s.skillId)return true;
   if(typeof catalogSkills==='undefined'||!catalogSkills)return false;
   return skillBranches(s).some(r=>r.spans.length&&!r.conditional&&!r.unknown);
 }

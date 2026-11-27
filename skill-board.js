@@ -2,7 +2,7 @@
 function renderSkillBoard(planned){
   if(!$('skillGroupsReady')||typeof catalog==='undefined'||!catalog)return;
   const filter=$('filter').value,query=$('q').value.trim(),slots=Array.from({length:6},()=>[]);
-  const groups=new Map(),best=new Map();
+  const groups=new Map(),best=new Map(),review=new Map();
   for(const s of state.skills){
     if(!active(s))continue;
     if(!best.has(s.name)||hint(s)>hint(best.get(s.name)))best.set(s.name,s);
@@ -21,13 +21,19 @@ function renderSkillBoard(planned){
     if(selected&&status==='条件適合'&&skillBranches(s).some(r=>r.conditional))warnings.push('展開次第');
     const key=JSON.stringify([s.owner,s.name,s.type,s.eventKey]),safeKey=esc(key);
     const override=state.hintOverrides?.[skillHintKey(s)];
-    const html='<article class="skillEntry '+(gold?'gold ':'')+(duplicate?'duplicate ':'')+(status==='条件不一致'?'outside ':'')+(warnings.length?'warnEntry':'')+'">'+
-      '<button id="skill'+i+'" class="skillName" aria-label="'+esc(s.name)+'" aria-pressed="'+selected+'" '+(!planAllowed(s)&&!selected?'disabled':'')+' onclick="toggleSkill('+i+','+!selected+')">'+esc(s.name)+' <b>'+ (cost(s,0)??'—')+'</b></button>'+
-      (warnings.length?'<small class="entryWarning">⚠ '+esc(warnings.join('・'))+'</small>':'')+
-      '<details data-key="'+safeKey+'" '+(opened.has(key)?'open':'')+'><summary>Lv'+hint(s)+(duplicate?' · 重複':'')+'</summary><div class="entryDetail">'+
-      '<label>ヒントLv<select id="hint'+i+'" onchange="setSkillHint('+i+',this.value)"><option value="">自動</option>'+[0,1,2,3,4,5].map(n=>'<option '+(override===n?'selected':'')+'>'+n+'</option>').join('')+'</select></label>'+
-      '<p>通常 '+(cost(s,0)??'—')+' ／ 切れ者 '+(cost(s,10)??'—')+' Pt</p><p>'+esc(selectionReason(s))+'</p>'+planDetails(s)+
-      '<label>基礎Pt<input type="number" min="0" value="'+esc(s.pt)+'" onchange="state.skills['+i+'].pt=this.value;render()"></label><button class="alt" onclick="edit('+i+')">詳細編集</button></div></details></article>';
+    const components=skillComponents(s),rating=courseGroup(s);
+    const cls=own||s.type==='進化'?'evolved':gold?'gold':'';
+    const level=hint(s);
+    const html='<article class="skillEntry '+cls+(duplicate?' duplicate':'')+(warnings.length?' warnEntry':'')+'">'+
+      '<button id="skill'+i+'" class="skillName" aria-label="'+esc(s.name)+'" aria-pressed="'+selected+'" '+(!planAllowed(s)&&!selected?'disabled':'')+' onclick="toggleSkill('+i+','+!selected+')">'+
+      (selected?'✓ ':'')+esc(s.name)+' <b>'+(cost(s,0)??'—')+'</b></button>'+
+      '<div class="miniControls"><select id="hint'+i+'" aria-label="'+esc(s.name)+' 最終ヒントLv" onchange="setSkillHint('+i+',this.value)"><option value="">自'+level+'</option>'+[0,1,2,3,4,5].map(n=>'<option value="'+n+'" '+(override===n?'selected':'')+'>Lv'+n+'</option>').join('')+'</select>'+
+      '<button class="infoButton" aria-label="'+esc(s.name)+'の詳細" onclick="openSkillInfo('+i+')">ⓘ</button></div>'+
+      '<div class="badges">'+components.map(([label,style])=>'<span class="'+style+'">'+label+'</span>').join('')+(duplicate?' 重複':'')+(warnings.length?' ⚠':'')+'</div></article>';
+    if(rating!=='適合'){
+      if(!review.has(rating))review.set(rating,[]);
+      review.get(rating).push('<div><small>'+esc(s.owner||s.type)+'</small>'+html+'</div>');return;
+    }
     const slot=s.type.startsWith('サポカ')?state.deck.indexOf(s.owner):-1;
     if(slot>=0){slots[slot].push(html);return}
     const group=s.type==='進化'?(s.festival?'シナリオ進化':'育成ウマ娘'):s.type==='キャラ'?'育成ウマ娘':s.type==='シナリオ'?(/リンク|選択/.test(s.note||'')?'サポカ連動・選択報酬':'シナリオ確定'):s.type==='因子'?'因子':s.type;
@@ -35,5 +41,11 @@ function renderSkillBoard(planned){
     groups.get(group).push(html);
   });
   slots.forEach((items,i)=>{$('cardSkills'+i).innerHTML=items.join('')});
-  $('rows').innerHTML=[...groups].map(([group,items])=>'<section class="sourceGroup"><h3>'+esc(group)+'</h3>'+items.join('')+'</section>').join('');
+  $('rows').innerHTML=[...groups].map(([group,items])=>'<section class="sourceGroup"><h3>'+esc(group)+'</h3>'+items.join('')+'</section>').join('')+['要確認','条件外','判定保留'].filter(k=>review.has(k)).map(k=>'<section class="sourceGroup review"><h3>'+k+' · '+review.get(k).length+'</h3>'+review.get(k).join('')+'</section>').join('');
+  for(let i=0;i<6;i++){
+    const reward=$('reward'+i);if(!reward)continue;
+    const list=state.skills.filter(s=>s.db&&s.type==='サポカ金'&&s.owner===state.deck[i]&&active(s)).map(s=>s.name);
+    reward.textContent=list.length?'報酬 '+list.length+'件':'イベント設定';reward.title=list.join('・');
+    const heading=$('eventHeading'+i);if(heading)heading.textContent=(i+1)+' '+(state.deck[i]||'未選択');
+  }
 }

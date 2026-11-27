@@ -12,7 +12,7 @@ const charEvents = document.createElement('div');
 charEvents.id = 'charEvents';
 charEvents.className = 'eventSlot';
 const whiteHint = document.createElement('label');
-whiteHint.textContent = '白ヒントLv';
+whiteHint.textContent = '白・最終Lv';
 const whiteLevel = document.createElement('select');
 whiteLevel.id = 'whiteHint';
 for (let level = 0; level <= 5; level++) whiteLevel.add(new Option(String(level)));
@@ -93,11 +93,11 @@ dbSetup = function () {
 whiteLevel.value = String(state.whiteHint ?? 5);
 drawSelectedImages();
 
-const secondary = document.createElement('details');
+const secondary = document.createElement('div');
 secondary.className = 'secondarySettings';
 const secondaryTitle = document.createElement('summary');
 secondaryTitle.textContent = '大会・覚醒・育成実績';
-secondary.append(secondaryTitle);
+
 const settingsFields = document.createElement('div');
 settingsFields.className = 'grid';
 secondary.append(settingsFields);
@@ -136,12 +136,29 @@ const pinned=document.createElement('div');
 pinned.className='pinnedSettings';
 setupSection.before(pinned);
 pinned.append(setupGrid);
-const options=document.createElement('details');
+const options=document.createElement('div');
 options.className='targetOptions';
-const title=document.createElement('summary');title.textContent='自動選択の対象';options.append(title);
+const title=document.createElement('strong');title.textContent='自動選択の対象';options.append(title);
 for (const [key,label,initial] of [['other','その他の適合スキル',true],['green','適合する緑',true],['heal','適合する回復',true],['training','予定した進化に必要なスキル',false],['raceNeeds','レース中の発動・強化に必要な候補',false]]) {
   const wrap=document.createElement('label'),input=document.createElement('input');input.type='checkbox';input.checked=state.autoTargets?.[key]??initial;
   input.onchange=()=>{(state.autoTargets??={})[key]=input.checked;save()};
   wrap.append(input,label);options.append(wrap);
 }
 plan.querySelector('p:has(button)').before(options);
+
+const eventPanel=document.createElement('details');
+eventPanel.className='supportEvents';
+eventPanel.innerHTML='<summary>サポカの完走報酬・分岐設定</summary><div class="eventGrid"></div>';
+strip.before(eventPanel);
+for(let i=0;i<6;i++){
+  const section=document.createElement('section');
+  section.innerHTML='<h3 id="eventHeading'+i+'"></h3>';
+  section.append($('cardEvents'+i));eventPanel.lastElementChild.append(section);
+  const button=document.createElement('button');button.id='reward'+i;button.className='rewardLink';
+  button.onclick=()=>{eventPanel.open=true;section.scrollIntoView({block:'center'});section.querySelector('select')?.focus({preventScroll:true})};
+  $('cardSkills'+i).before(button);
+}
+const actionBar=document.createElement('div');
+actionBar.className='selectionBar';
+setupSection.insertBefore(actionBar,strip);
+actionBar.append(options,$('autoMode').closest('label'),plan.querySelector('p:has(button)'));

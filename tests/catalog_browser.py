@@ -50,6 +50,7 @@ with sync_playwright() as pw:
         page.locator('#previewdbCard0').click()
         page.fill('#pickerSearch', 'As if Guided')
         page.locator('#pickerGrid button').first.click()
+        page.locator('#reward0').click()
         branch = page.locator('#cardEvents0 select').first
         branch.select_option(index=1)
         assert page.evaluate("state.skills.some(x => x.name === '華麗な踏み込み' && x.hint === 5)")
@@ -59,10 +60,9 @@ with sync_playwright() as pw:
         assert page.locator('#budget').input_value() == '8765'
         assert page.evaluate("cost(state.skills.find(x => x.name === '手入力の回帰確認'), 0)") == before
         page.fill('#q', '手入力の回帰確認')
-        page.locator('#rows .skillEntry summary').click()
         page.locator('#rows select').select_option('5')
         assert page.evaluate("cost(state.skills.find(x => x.name === '手入力の回帰確認'), 0)") == 72
-        skill_button = page.get_by_role('button', name='手入力の回帰確認')
+        skill_button = page.get_by_role('button', name='手入力の回帰確認',exact=True)
         skill_button.click()
         assert skill_button.get_attribute('aria-pressed') == 'false'
         skill_button.click()
@@ -101,12 +101,12 @@ with sync_playwright() as pw:
         page.select_option('#style','差し')
         page.get_by_role('button', name='条件に合う候補を選択').click()
         assert not page.evaluate("state.skills.some(x=>x.name==='先行直線○' && x.selected)")
-        assert page.evaluate("state.skills.filter(s=>s.type==='進化'&&s.selected).every(s=>evolutionStatus(s)==='取得可能')")
+        assert page.evaluate("state.skills.filter(s=>s.type==='進化'&&s.selected).every(s=>selfEvolution(s)||evolutionStatus(s)==='取得可能')")
         assert page.evaluate("raceBranch({condition:'remain_distance==200'}).spans[0][0]===2200")
         assert page.evaluate("raceBranch({condition:'unverified_condition==1'}).unknown")
         assert page.evaluate("document.documentElement.scrollWidth===innerWidth")
         if width < 500:
-            assert not page.locator('.secondarySettings').evaluate("el=>el.open")
+            assert page.locator('.secondarySettings input').first.is_visible()
             assert page.locator('.deckSlot').last.bounding_box()['y'] == page.locator('.deckSlot').first.bounding_box()['y']
         page.evaluate("$('dbChar').value='100101';$('dbChar').onchange()")
         # Real skill 100101311 requires awakening 7 and four skills of either strategy.
@@ -147,7 +147,7 @@ with sync_playwright() as pw:
         assert page.evaluate("state.skills.filter(s=>s.blockedReason).every(s=>document.getElementById('skill'+state.skills.indexOf(s))?.disabled)")
         page.select_option('#autoMode','course')
         page.get_by_role('button', name='条件に合う候補を選択').click()
-        assert page.evaluate("state.skills.filter(s=>s.selected).every(s=>autoEligible(s))")
+        assert page.evaluate("state.skills.filter(s=>s.selected).every(s=>selfEvolution(s)||autoEligible(s))")
         assert page.locator('#courseTimeline .axisTick').count()==5
         page.select_option('#dbChar','101703',force=True)
         page.locator('select').filter(has=page.locator('option[value="loh202611"]')).select_option('loh202611',force=True)
@@ -156,7 +156,13 @@ with sync_playwright() as pw:
             clearSel();
             const i=state.skills.findIndex(s=>s.skillId===101703211), evo=state.skills[i];
             if(!selfEvolution(evo)||!planAllowed(evo))return false;
-            toggleSkill(i,true);
+            auto();
+            if(!evo.selected||!state.skills.find(s=>s.name==='大望は煌めきとなりて')?.selected)return false;
+            const base={type:'サポカ通常',hint:3,name:'一括検証',owner:'検証',db:true};
+            state.whiteHint=5;
+            if(hint(base)!==5||hint({...base,type:'因子'})!==3||hint({...base,type:'サポカ金'})!==3)return false;
+            state.hintOverrides[skillHintKey(base)]=1;
+            if(hint(base)!==1)return false;
             return evo.selected && raceNeeds(evo).some(r=>r.need===7) &&
                 !trainingGroups(evo).flat().some(x=>x.req?.need===7) &&
                 verdict(state.skills.find(x=>x.name==='気炎万丈'))==='条件不一致' &&

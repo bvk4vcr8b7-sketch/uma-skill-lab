@@ -168,3 +168,20 @@ button.selectedImage:after{content:none}
  .eventSlot label{font-size:10px}
  #rows{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
+
+.selectionBar{display:flex;flex-wrap:wrap;align-items:center;gap:3px 8px;margin:5px 0;background:#f4f8f5;padding:4px}
+.selectionBar p,.selectionBar .targetOptions{margin:0}.targetOptions strong{font-size:12px}
+.secondarySettings .grid{grid-template-columns:2fr repeat(7,minmax(0,1fr));gap:4px}
+.supportEvents{margin:4px 0}.eventGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:4px}
+.eventGrid section{margin:0;padding:5px}.eventGrid h3{font-size:12px;margin:0}
+.rewardLink,.infoButton{background:#f4f7f5;color:#18543f;padding:1px 2px;font-size:11px;min-height:24px;margin:0}
+.rewardLink{overflow:hidden;white-space:nowrap;width:100%}
+.skillEntry.gold{background:#fff0c1}.skillEntry.evolved{background:#ffe5ee;border-inline-start:3px solid #ce6188}
+.skillEntry .skillName[aria-pressed=true]{background:transparent;color:#143e2f;font-weight:800}
+.miniControls{display:flex;align-items:center;gap:1px}.miniControls select{width:auto;max-width:72%;min-width:0;min-height:22px;padding:0;font-size:11px}.miniControls button{width:auto;min-width:17px;min-height:22px}
+.badges{font-size:10px;line-height:1.2;color:#535e58}.badges span{padding:0 2px;margin-right:1px;border-radius:2px}
+.green{background:#bee7c7}.heal{background:#c4e7fd}.spd{background:#ffdf81}.acc{background:#ffc09b}.now{background:#e3ceff}.misc{background:#e3e6e4}
+.skillEntry.duplicate{border-inline-end:2px dashed #9ba49e}.review>div>small{display:block;font-size:10px;padding:2px}
+#skillInfo{max-width:min(92vw,520px);max-height:78vh;box-sizing:border-box;overflow:auto;border:1px solid #abc8b6;border-radius:8px;color:#233c30}
+#skillInfo form{float:right}#skillInfo dt{font-weight:700;margin-top:8px}#skillInfo dd{margin:1px 0;overflow-wrap:anywhere}
+@media(max-width:600px){.secondarySettings .grid{grid-template-columns:repeat(4,minmax(0,1fr))}.secondarySettings input{min-width:0;width:100%}.selectionBar label,.targetOptions label{font-size:11px}.selectionBar p{display:flex;gap:4px}.selectionBar button{font-size:12px;width:auto}.miniControls select{font-size:11px}.rewardLink{font-size:9px}.miniControls button{font-size:12px}.selectionBar input[type=checkbox]{min-height:16px;width:16px}.pinnedSettings #scenarioNotice{display:none}}
