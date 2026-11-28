@@ -143,7 +143,7 @@ pinned.append(setupGrid);
 const options=document.createElement('div');
 options.className='targetOptions';
 const title=document.createElement('strong');title.textContent='自動選択の対象';options.append(title);
-for (const [key,label,initial] of [['other','その他',true],['green','緑',true],['heal','回復',true],['training','進化条件',false],['raceNeeds','発動・強化条件',false]]) {
+for (const [key,label,initial] of [['other','その他',true],['debuff','デバフ',true],['green','緑',true],['heal','回復',true],['training','進化条件',false],['raceNeeds','発動・強化条件',false]]) {
   const wrap=document.createElement('label'),input=document.createElement('input');input.type='checkbox';input.checked=state.autoTargets?.[key]??initial;
   input.onchange=()=>{(state.autoTargets??={})[key]=input.checked;save()};
   wrap.append(input,label);options.append(wrap);

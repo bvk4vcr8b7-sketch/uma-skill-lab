@@ -4,8 +4,8 @@ function planAllowed(s){return active(s)&&(selfEvolution(s)||acquisition(s)==='�
 function selectedTrainingSkills(){
   const found=new Map();
   function visit(s){
-    if(!s||found.has(s.name))return;
-    found.set(s.name,s);
+    if(!s||found.has(skillIdentity(s)))return;
+    found.set(skillIdentity(s),s);
     const lower=lowerStage(s),name=s.pre||lower?.name;
     if(name)visit(state.skills.find(x=>active(x)&&x.name===name)||(lower&&{name:lower.name,skillId:lower.id,type:'前提'}));
   }

@@ -4,7 +4,7 @@ const factorTypes=['青','赤','緑','白','レース','シナリオ'];
 tabPages[1].innerHTML='<section><h2>因子台帳</h2><label>検索<input id="factorSearch" type="search"></label><select id="factorList" aria-label="登録済み因子"></select><button id="newFactor">新規</button><div class="grid"><label>ウマ娘名<input id="factorName" required></label><label>衣装<input id="factorOutfit"></label><label>所有<select id="factorOwner"><option>自前</option><option>レンタル</option></select></label></div><div id="factorRows"></div><button id="addFactorRow">因子を追加</button> <button id="saveFactor">台帳に保存</button> <button id="deleteFactor" class="alt">削除</button><div id="imageImport"></div></section>';
 tabPages[2].innerHTML='<section><h2>出走ウマ娘管理</h2><label>保存済み個体<select id="runnerList"></select></label><div class="grid"><label>個体名<input id="runnerName"></label><label>大会<input id="runnerRace"></label><label>育成状態<select id="runnerStatus"><option>育成予定</option><option>完成</option></select></label><label>採用<select id="runnerUse"><option>未定</option><option>採用</option><option>不採用</option></select></label><label>適性<input id="runnerFit" placeholder="芝A・長距離S など"></label></div><button id="runnerSave">現在の計画を新規保存</button> <button id="runnerUpdate">選択個体を更新</button> <button id="runnerOpen">計算機で再編集</button><div id="runnerComparison"></div></section>';
 const inheritance=document.createElement('details');inheritance.className='inheritance';
-inheritance.innerHTML='<summary>継承因子を呼び出す</summary><div class="grid"></div>';
+inheritance.innerHTML='<summary>親・祖父母の継承因子を選択</summary><p id="inheritanceStatus"></p><button onclick="showWorkspace(1)">因子台帳を開く</button><div class="grid"></div>';
 strip.before(inheritance);
 const factorSource=(id)=>loadLibrary().factors.find(f=>f.id===id);
 function option(value,label){return new Option(label,value)}
@@ -21,8 +21,10 @@ function fillFactor(f){
   $('factorName').value=f?.name||'';$('factorOutfit').value=f?.outfit||'';$('factorOwner').value=f?.owner||'自前';
   $('factorRows').replaceChildren();(f?.traits?.length?f.traits:[{}]).forEach(addTrait);
 }
+var savedFactorIds=new Set();
 function libraryLists(){
   const lib=loadLibrary(),q=$('factorSearch').value,prev=$('factorList').value;
+  savedFactorIds=new Set(lib.factors.map(f=>f.id));
   $('factorList').replaceChildren(option('','新規登録'),...lib.factors.filter(f=>[factorTitle(f),...f.traits.map(t=>t.name)].join(' ').includes(q)).map(f=>option(f.id,factorTitle(f))));
   $('factorList').value=prev;
   for(const [i,input] of [...inheritance.querySelectorAll('select')].entries()){
@@ -31,16 +33,20 @@ function libraryLists(){
   const r=$('runnerList').value;$('runnerList').replaceChildren(option('','個体を選択'),...lib.runners.map(x=>option(x.id,x.race+'・'+x.name)));$('runnerList').value=r;
   $('runnerComparison').innerHTML=lib.runners.map(x=>'<p><b>'+esc(x.name)+'</b> '+esc([x.race,x.status,x.use,x.fit,Object.values(x.plan.trainingFacts||{}).join('/')].join(' · '))+'</p>').join('');
 }
+// Race rewards: Game8 448912; L'Arc overseas aptitude: Altema projectlarc.
+const factorRewards={レース:{'宝塚記念':'夏ウマ娘○','天皇賞(春)':'春ウマ娘○','天皇賞(秋)':'秋ウマ娘○','フェブラリーS':'冬ウマ娘○','有馬記念':'中山レース場○','ジャパンC':'東京レース場○','ジャパンカップ':'東京レース場○','菊花賞':'京都レース場○','秋華賞':'京都レース場○','エリザベス女王杯':'非根幹距離○','大阪杯':'根幹距離○','スプリンターズS':'根幹距離○','高松宮記念':'中京レース場○','帝王賞':'大井レース場○','東京大賞典':'大井レース場○'},シナリオ:{'凱旋門賞連覇の夢':'下り坂巧者'}};
 function syncFactors(){
   const old=state.skills.filter(s=>s.factorRef);
   state.skills=state.skills.filter(s=>!s.factorRef);
   for(const [i,id] of (state.factorSlots||[]).entries()){
     const f=factorSource(id);if(!f)continue;
-    for(const t of f.traits.filter(t=>['白','緑'].includes(t.type))){
-      const matches=catalog.skills.filter(s=>s.name===t.name);
+    for(const t of f.traits){
+      const name=['白','緑'].includes(t.type)?t.name:factorRewards[t.type]?.[t.name.normalize('NFKC')];
+      if(!name)continue;
+      const matches=catalog.skills.filter(s=>s.name===name);
       if(matches.length!==1)continue;
       const r=matches[0],ref=i+'/'+id+'/'+r.id;
-      state.skills.push({...old.find(s=>s.factorRef===ref),factorRef:ref,name:r.name,owner:roles[i]+' '+factorTitle(f),type:'因子',pt:r.baseSp,skillId:r.id,hint:0});
+      state.skills.push({...old.find(s=>s.factorRef===ref),factorRef:ref,factorTrait:t.type+'・'+t.name,name:r.name,owner:roles[i]+' '+factorTitle(f),type:'因子',pt:r.baseSp,skillId:r.id,hint:0});
     }
   }
   render();
@@ -71,4 +77,8 @@ $('runnerSave').onclick=()=>saveRunner(false);$('runnerUpdate').onclick=()=>save
 $('runnerList').onchange=()=>{const x=loadLibrary().runners.find(x=>x.id===$('runnerList').value);if(!x)return;for(const [id,k] of [['runnerName','name'],['runnerRace','race'],['runnerStatus','status'],['runnerUse','use'],['runnerFit','fit']])$(id).value=x[k]};
 $('runnerOpen').onclick=()=>{const x=loadLibrary().runners.find(x=>x.id===$('runnerList').value);if(!x)return;localStorage.setItem('umaPlanner1',JSON.stringify({...x.plan,awakening:Number(x.awakening)}));location.reload()};
 
+const historyRows=state.skills.filter(s=>s.type==='因子'&&!s.factorRef);
+if(historyRows.length){
+  const archive=document.createElement('details');archive.innerHTML='<summary>旧保存の因子候補（未割当）</summary><ul>'+historyRows.map(s=>'<li>'+esc(s.name)+' · Lv'+hint(s)+'</li>').join('')+'</ul>';tabPages[1].append(archive);
+}
 libraryLists();fillFactor(null);

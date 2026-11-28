@@ -24,7 +24,7 @@ with sync_playwright() as pw:
         page.goto('http://127.0.0.1:8765/legacy.html')
         before = page.evaluate("""() => {
             state.budget = '8765';
-            state.skills.push({name:'手入力の回帰確認', type:'因子', owner:'', pt:120, hint:1, selected:true});
+            state.skills.push({name:'手入力の回帰確認', type:'継承固有', owner:'', pt:120, hint:1, selected:true});
             save();
             return cost(state.skills.at(-1), 0);
         }""")
@@ -95,6 +95,7 @@ with sync_playwright() as pw:
         page.fill('#pickerSearch','フォーエバーヤング')
         assert page.locator('#pickerGrid button').filter(has_text='フォーエバーヤング').count() == 2
         page.get_by_role('button', name='閉じる', exact=True).click()
+        page.evaluate("state.skills.push({name:'先行直線○',skillId:201312,type:'継承固有',owner:'回帰確認',pt:130,hint:0})")
         page.select_option('#dbCourse','10606')
         page.select_option('#style','先行')
         page.get_by_role('button', name='条件に合う候補を選択').click()
@@ -121,7 +122,7 @@ with sync_playwright() as pw:
             clearSel();
             results.push(evolutionStatus(current));
             for(let i=0;i<4;i++)state.skills.push({
-                name:'代替条件テスト'+i,type:'因子',selected:true,
+                name:'代替条件テスト'+i,type:'継承固有',selected:true,
                 activation:{branches:[{styles:['sashi']}]}
             });
             results.push(evolutionStatus(current));
@@ -135,12 +136,12 @@ with sync_playwright() as pw:
         assert costs == [[130,117,104,91,84,78],[117,104,91,78,71,65]]
         assert page.evaluate("""() => {
             clearSel();
-            const low={name:'先行直線○',skillId:201312,type:'因子',owner:'',hint:0,pt:130};
+            const low={name:'先行直線○',skillId:201312,type:'継承固有',owner:'',hint:0,pt:130};
             const high={...low,name:'先行直線◎',skillId:201311,pt:270,selected:true};
             state.skills= [high,low,{...low,hint:5,selected:true}];
             const [items]=chosen();
-            return items.size===2 && cost(items.get(low.name),0)===78 &&
-                   cost(items.get(high.name),0)===140 && cost({...high,type:'進化'},0)===0;
+            return items.size===2 && cost(items.get(low.skillId),0)===78 &&
+                   cost(items.get(high.skillId),0)===140 && cost({...high,type:'進化'},0)===0;
         }""")
         page.select_option('#dbScenario','らっしゃい！トレセン軒！')
         assert page.evaluate("state.skills.some(s=>s.blockedReason)")
@@ -165,7 +166,7 @@ with sync_playwright() as pw:
             state.whiteHint=5;
             if(!catalog.supports.every(c=>(c.hintSkillIds||[]).every(id=>hint({...base,owner:c.name,skillId:id,hint:Math.min(5,1+(c.hintByLimit?.[0]||0))})===5)))return false;
             if(hint(base)!==5||hint({...base,type:'因子'})!==3||hint({...base,type:'サポカ金'})!==3)return false;
-            state.hintOverrides[skillHintKey(base)]=1;
+            (state.hintOverrides??={})[skillHintKey(base)]=1;
             if(hint(base)!==1)return false;
             return evo.selected && raceNeeds(evo).some(r=>r.need===7) &&
                 !trainingGroups(evo).flat().some(x=>x.req?.need===7) &&

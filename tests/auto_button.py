@@ -37,7 +37,7 @@ def check_auto_button(page, baseline=False):
     page.get_by_text('育成実績の詳細',exact=True).click()
     fan.fill('123456')
     fan.press('Tab')
-    assert page.evaluate("() => {const [items]=chosen();const gold=items.get('全身全霊');return gold.pt===340&&stepPoints(gold)===170&&items.has('末脚')&&cost(items.get('捧ぐる願い'),0)===0}")
+    assert page.evaluate("() => {const [items]=chosen();const gold=items.get(200511);return gold.pt===340&&stepPoints(gold)===170&&items.has(200512)&&cost(items.get(415041),0)===0}")
     assert '不足' in page.locator('#stats').inner_text()
     assert all(page.get_by_role('button',name=s,exact=True).first.get_attribute('aria-pressed')=='true' for s in gold+own+scenario)
     page.evaluate("state.autoTargets={other:false,heal:false,green:false};save()")

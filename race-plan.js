@@ -145,9 +145,10 @@ function courseGroup(s){
   return '適合';
 }
 function autoEligible(s,ignoreCategories=false){
+  if(!ignoreCategories&&typeof catalog!=='undefined'&&catalog&&opponentEffect(skillRecord(s))&&state.autoTargets?.debuff===false)return false;
   if(selfEvolution(s))return autoEvolution(s);
   if(s.type==='進化'||(typeof catalog!=='undefined'&&catalog&&skillRecord(s)?.rarity===2))return acquisition(s)==='取得可能'&&canRace(s);
-  if(!ignoreCategories&&typeof catalog!=='undefined'&&catalog){const kind=trainingType(s);if(state.autoTargets?.[kind==='緑'?'green':kind==='回復'?'heal':'other']===false)return false;}
+  if(!ignoreCategories&&typeof catalog!=='undefined'&&catalog){const kind=trainingType(s);if(state.autoTargets?.[opponentEffect(skillRecord(s))?'debuff':kind==='緑'?'green':kind==='回復'?'heal':'other']===false)return false;}
   if(acquisition(s)!=='取得可能'||verdict(s)!=='条件適合')return false;
   if(courseGroup(s)!=='適合')return false;
   if(s.type==='進化'||skillRecord(s)?.rarity===2||$('autoMode').value!=='course'||!s.skillId)return true;

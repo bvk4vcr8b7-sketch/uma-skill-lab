@@ -96,7 +96,10 @@ async function loadCatalog(){
     catalogChars=new Map(catalog.characters.map(x=>[x.name,x]));
     for(const skill of catalog.skills)if(!skill.branches?.length&&catalog.extraBranches[skill.id])skill.branches=catalog.extraBranches[skill.id];
     catalogSkills=new Map(catalog.skills.map(x=>[x.id,x]));
+    catalog.bySkillName=new Map();
+    for(const s of catalog.skills)catalog.bySkillName.set(s.name,catalog.bySkillName.has(s.name)?null:s.id);
     dbSetup();
+    if(state.factorSlots?.some(Boolean))syncFactors();
     $('catalogSkill').oninput=showCatalogSkill;
     $('catalogStatus').textContent='サポカ '+catalog.supports.length+'枚・育成 '+catalog.characters.length+'衣装。資料確認日 2026-11-27';
   }catch(e){$('catalogStatus').textContent='同梱DBの読み込み失敗　'+e.message}

@@ -1,7 +1,8 @@
 'use strict';
 const timelineOptions={selected:true,kind:'すべて',order:'位置順',phase:'全区間'};
-const effectTypes=['速度','加速','回復','複合','その他・未照合'];
+const effectTypes=['速度','加速','回復','複合','その他・未照合','デバフ'];
 function effectType(s){
+  if(opponentEffect(skillRecord(s)))return skillComponents(s).length>1?'複合':'デバフ';
   if(effectTypes.includes(s.kind))return s.kind;
   const verified={speed:'速度',acceleration:'加速',heal:'回復',multi:'複合',passive:'その他・未照合',other:'その他・未照合'}[catalog.effectTypes?.[s.skillId]];
   if(verified)return verified;
@@ -38,8 +39,8 @@ function activationChart(selectedSkills){
     html+='<details><summary>境界距離・坂</summary>'+parts.map(([a,b,k])=>k+' '+a+'–'+b+'m').concat(geo.slopes.map(([a,b,g])=>(g>0?'上り坂':'下り坂')+' '+a+'–'+b+'m')).join(' ／ ')+'</details>';
   }else html+=row('コース','形状未照合');
   const skills=timelineOptions.selected?[...selectedSkills]:state.skills.filter(s=>active(s)&&acquisition(s)!=='取得不可');
-  const unique=new Map(skills.map(s=>[s.name,s]));
-  if(timelineOptions.selected)for(const s of skills){if(s.type==='進化'&&s.pre)unique.delete(s.pre);const lower=lowerStage(s);if(lower)unique.delete(lower.name)}
+  const unique=new Map(skills.map(s=>[skillIdentity(s),s]));
+  if(timelineOptions.selected)for(const s of skills){if(s.type==='進化'&&s.pre)unique.delete(catalog.evolutionRules?.[s.skillId]?.parent||skillIdentity({name:s.pre}));const lower=lowerStage(s);if(lower)unique.delete(lower.id)}
   const phase=phases.indexOf(timelineOptions.phase),entries=[];
   for(const s of unique.values()){
     const kind=effectType(s);
