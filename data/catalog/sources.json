@@ -1,0 +1,34 @@
+{
+  "checkedOn": "2026-11-27",
+  "region": "JP",
+  "sources": [
+    "https://github.com/mee1080/umasim/blob/e9bb2939ba117ea93e556790c353ed3edec27eab/data/support_card.txt",
+    "https://github.com/mee1080/umasim/blob/e9bb2939ba117ea93e556790c353ed3edec27eab/data/skill_data.txt",
+    "https://github.com/mee1080/umasim/blob/e9bb2939ba117ea93e556790c353ed3edec27eab/data/all_skill_info.txt",
+    "https://github.com/Cilda/UmaUmaChecker/blob/42da047b02dca0282f5fa6500cdca9880656b891/UmaUmaChecker/Library/Events.json",
+    "https://github.com/amate/UmaUmaCruise/blob/ee989e40bd2e7960f12c5306d775a7e599204f71/UmaLibrary/UmaMusumeLibrary.json",
+    "https://github.com/Tsuyuchan-jp/umamusume-data/blob/8f6f60d94ff9e803ad1ef70643c946257d7499ea/data/characters.json",
+    "https://github.com/Tsuyuchan-jp/umamusume-data/blob/8f6f60d94ff9e803ad1ef70643c946257d7499ea/data/skills.json",
+    "https://github.com/Tsuyuchan-jp/umamusume-data/blob/8f6f60d94ff9e803ad1ef70643c946257d7499ea/data/events.json",
+    "https://github.com/Tsuyuchan-jp/umamusume-data/blob/8f6f60d94ff9e803ad1ef70643c946257d7499ea/data/supports.json",
+    "https://github.com/alpha123/uma-skill-tools/blob/8b3f5e27e939e77431679876403d3fb2f0709e2a/data/skill_data.json",
+    "https://github.com/hzyhhzy/UmaAi/blob/HEAD/db/cardDB.json",
+    "https://github.com/shiyuzi-ship-it/umamusumedb/blob/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/data/supportCards.json",
+    "https://github.com/shiyuzi-ship-it/umamusumedb/blob/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/data/characters.json",
+    "https://github.com/shiyuzi-ship-it/umamusumedb/blob/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/data/skills.json",
+    "https://github.com/Cilda/UmaUmaChecker/blob/42da047b02dca0282f5fa6500cdca9880656b891/UmaUmaChecker/Library/Chara.json",
+    "https://github.com/kakuun333/UmaAssistant/blob/main/UmaAssistant/UmaData/convert_data/event_data_jp_cvt_tw_card.json"
+  ],
+  "additional": [
+    "https://gametora.com/ja/umamusume/supports/20102-stay-gold",
+    "https://gametora.com/ja/umamusume/supports/30324-no-reason"
+  ],
+  "fields": {
+    "supportCards.json": "画像・カードID・属性・実装日",
+    "support_card.txt": "各凸の通常効果・固有効果・特殊効果コード・通常ヒント",
+    "characters.json": "衣装・覚醒Lv・画像",
+    "skill_data.txt / all_skill_info.txt": "スキルPt・進化元・発動条件",
+    "Chara.json / Events.json / UmaMusumeLibrary.json": "育成・サポートイベント、選択肢と結果",
+    "eventLinks.json": "同一衣装・カードの資料表記との対応。Rの取得イベント名はUmaAssistantの日本語対応表で照合"
+  }
+}

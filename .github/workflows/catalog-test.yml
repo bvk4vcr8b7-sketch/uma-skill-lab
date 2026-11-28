@@ -1,0 +1,30 @@
+name: Planner regression
+on:
+  push:
+    branches-ignore: [main]
+  pull_request:
+    branches: [main]
+    types: [opened, reopened]
+permissions:
+  contents: read
+jobs:
+  browser:
+    runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        browser: [chromium, webkit]
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - run: pip install playwright==1.55.0
+      - run: python -m playwright install --with-deps ${{ matrix.browser }}
+      - name: Exercise desktop and mobile layouts
+        env:
+          BROWSER: ${{ matrix.browser }}
+        run: |
+          python -m http.server 8765 --bind 127.0.0.1 &
+          python tests/catalog_browser.py

@@ -1,0 +1,206 @@
+:root{color-scheme:light;--ink:#173a2f;--muted:#586c63;--green:#14664c;--line:#d7e3dc;--surface:#fff}
+body{font:15px/1.4 system-ui,-apple-system,sans-serif;background:#f2f6f3;color:var(--ink)}
+header{background:#fff;color:var(--ink);border-bottom:1px solid var(--line);padding:10px max(12px,calc((100% - 1080px)/2))}
+header h1{font-size:19px;margin:0;white-space:nowrap}
+main{max-width:1080px;padding:8px 12px calc(124px + env(safe-area-inset-bottom))}
+section,.toolPanel{margin:8px 0;padding:10px;border:1px solid var(--line);background:var(--surface);border-radius:8px}
+h2{font-size:17px;margin:0 0 5px}
+.grid{gap:6px;grid-template-columns:repeat(auto-fit,minmax(120px,1fr))}
+label,.traineeControl{display:grid;align-content:start;gap:3px;font-size:13px;font-weight:600;min-width:0}
+input,select,button,textarea{min-height:34px;padding:4px 7px;margin:0;border-radius:5px}
+select,input{background:white;color:var(--ink);min-width:0}
+button:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid #287c56;outline-offset:2px}
+.setup .grid{grid-template-columns:repeat(auto-fit,minmax(105px,1fr))}
+.setup details{margin:6px 0}
+.setup details summary,.toolPanel > summary{font-weight:600}
+#scenarioNotice{font-weight:400;font-size:12px}
+.deckStrip{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px;align-items:start}
+.deckSlot{display:grid;gap:4px;min-width:0}
+button.selectedImage{position:relative;isolation:isolate;display:flex;flex-direction:column;justify-content:flex-end;align-items:stretch;gap:0;width:100%;aspect-ratio:3/4;min-height:0;padding:0;overflow:hidden;border:1px solid #a8c2b3;background:#e9f2ed;color:var(--ink);text-align:left;border-radius:7px}
+button.selectedImage:after{content:none}
+.selectedImage img{position:absolute;z-index:-1;inset:0;width:100%;height:100%;object-fit:contain}
+.selectedImage span{padding:4px;background:#14382de8;color:white;font-size:11px;line-height:1.2;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;min-height:2.4em}
+.selectedImage:not(:has(img:not([hidden])))::before{content:'＋';position:absolute;top:43%;left:50%;translate:-50% -50%;color:var(--green);font-size:1.5rem}
+.traineeControl button.selectedImage{aspect-ratio:auto;height:37px}
+.traineeControl .selectedImage img{width:36px;object-position:left}
+.traineeControl .selectedImage span{background:transparent;color:var(--ink);padding-inline-start:38px}
+.traineeControl .selectedImage::before{display:none}
+.deckSlot > select{width:100%}
+.eventSlot{display:grid;gap:4px;min-width:0}
+.eventSlot:empty,#eventChoices:empty{display:none}
+#charEvents,#eventChoices{grid-template-columns:repeat(auto-fit,minmax(160px,1fr));display:grid;gap:6px;margin-top:6px}
+.eventSlot label,#eventChoices label{font-size:12px;overflow-wrap:anywhere}
+.eventSlot select,#eventChoices select{text-overflow:ellipsis;width:100%}
+.plan > p{margin:5px 0}
+.plan .grid{margin:6px 0}
+.plan table{table-layout:fixed;white-space:normal}
+.plan th,.plan td{padding:4px 6px}
+.plan th{background:#e9f1ed;font-size:13px}
+.plan th:nth-child(2){width:94px}
+.plan th:nth-child(3){width:116px}
+.plan td:last-child{font-variant-numeric:tabular-nums;white-space:nowrap}
+.skillName{color:var(--green);background:transparent;border:0;font-weight:650;text-align:left;padding:4px 5px}
+.skillName[aria-pressed=true]{color:#fff;background:var(--green)}
+.skillMeta{display:block;overflow-wrap:anywhere;font-size:12px}
+.duplicate{background:#f3f5f4}
+.duplicate .skillName[aria-pressed=false]{color:#52685e}
+.mismatch .skillMeta{color:#89500d}
+.skillEdit{margin:2px 0}
+.skillEdit summary{font-size:12px;color:var(--muted)}
+.toolPanel pre{overflow:auto}
+.totals{position:fixed;inset:auto 0 0;z-index:10;background:#135640;color:#fff;padding:6px 12px calc(6px + env(safe-area-inset-bottom));box-shadow:0 -2px 10px #19392c26}
+.stats{max-width:1080px;margin:auto;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px}
+.stats div{background:#ffffff12;color:white;padding:4px 7px;font-size:12px}
+.stats b{font-size:18px;white-space:nowrap}
+.stats small{grid-column:1/-1;color:#e4f8e9;font-size:12px}
+.pickerOpen{overflow:hidden}
+#imagePicker{overscroll-behavior:contain;padding-bottom:max(12px,env(safe-area-inset-bottom))}
+.pickerHead,.pickerGrid{max-width:1080px;margin:auto}
+.pickTile img{aspect-ratio:3/4;height:auto;max-height:160px}
+@media(max-width:600px){
+ main{padding-inline:8px}
+ section,.toolPanel{padding:7px}
+ .setup .grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .deckStrip{grid-template-columns:repeat(6,minmax(76px,1fr));overflow-x:auto;overscroll-behavior-inline:contain;padding-bottom:4px}
+ input,select,button{min-height:40px}
+ .selectedImage{margin:0}
+ .plan th:nth-child(2){width:76px}
+ .plan th:nth-child(3){width:82px}
+ .skillName{width:auto}
+ .stats b{font-size:15px}
+ .pickerGrid{grid-template-columns:repeat(auto-fill,minmax(88px,1fr))}
+}
+
+#charEvents:empty,#eventChoices:empty{display:none}
+.storyBranches > summary{font-size:12px;line-height:1.3;overflow-wrap:anywhere}
+.storyBranches > label{margin-top:4px}
+.pickerHead > button{width:auto}
+
+@media(max-width:600px){
+ main{padding-top:2px}
+ header{padding-block:5px}
+ .setup,.plan{padding:5px;margin:4px 0}
+ .setup .grid{gap:3px 5px}
+ .setup label,.traineeControl{gap:0}
+ .setup select,.setup input{min-height:32px}
+ .setup details{margin:3px 0}
+ .deckStrip{grid-template-columns:repeat(6,minmax(62px,1fr));gap:3px}
+ .deckSlot{gap:2px}
+ .selectedImage span{font-size:11px}
+ .skillEdit{display:inline-block;margin:0}
+ .skillMeta{display:inline;font-size:12px}
+ .plan td{padding:2px 4px}
+ .skillName{display:block;min-height:32px}
+ .stats div{padding:2px 4px}
+}
+@media(max-width:600px){
+ .deckStrip{grid-template-columns:repeat(6,minmax(0,1fr));overflow-x:clip}
+ .deckSlot > select{padding-inline:1px}
+ .setup{overflow-wrap:anywhere}
+}
+@media(max-width:600px){
+ .setup label,.setup .traineeControl{overflow:hidden;grid-template-columns:minmax(0,1fr)}
+ .setup select{text-overflow:ellipsis}
+}
+
+@media(max-width:600px){
+ .plan > p:has(button){display:flex;gap:5px}
+ .plan > p > button{width:auto;min-height:34px;flex:1}
+ .plan > p > button:first-child{flex:2}
+ .traineeControl .selectedImage span{font-size:12px;text-overflow:ellipsis;white-space:nowrap;display:block;min-height:0}
+}
+
+.axisControls{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.axisControls label{display:flex;align-items:center;gap:3px}
+.axisControls input[type=checkbox]{width:auto;min-height:0}
+.axisRow{display:grid;grid-template-columns:minmax(78px,24%) minmax(0,1fr);align-items:stretch;border-bottom:1px solid #d7e3dc}
+.axisLabel{padding:4px;overflow-wrap:anywhere;font-size:13px}
+.axisRow details{margin:0}
+.axisLane{position:relative;min-height:25px;align-self:center;background:linear-gradient(to right,transparent 16.45%,#b7c9c0 16.66%,transparent 16.9%,transparent 66.45%,#b7c9c0 66.66%,transparent 66.9%,transparent 83.15%,#b7c9c0 83.33%,transparent 83.55%)}
+.axisLane svg{display:block;width:100%;height:32px}
+.axisMark{position:absolute;top:4px;bottom:4px;text-align:center;overflow:hidden;font-size:12px;white-space:nowrap;box-sizing:border-box}
+.axisTick{position:absolute;top:5px;transform:translateX(-50%);font-size:11px}.axisTick.t0{transform:none}.axisTick.t4{transform:translateX(-100%)}
+.p0{background:#c3dff4}.p1{background:#b8dfc6}.p2{background:#f7d5a1}.p3{background:#e8cde0}
+.straight{background:#d8e5ed}.corner{background:#d8dcc2;border-inline-start:1px solid white}
+.skillBand{background:var(--effect);top:9px;bottom:9px;min-width:2px}
+.k0{--effect:#2179a5}.k1{--effect:#bf6c19}.k2{--effect:#24875c}.k3{--effect:#9165a1}.k4{--effect:#73808c}
+.skillBand.random{background:repeating-linear-gradient(120deg,var(--effect) 0 3px,transparent 3px 5px);border-block:1px solid var(--effect)}
+.skillBand.point{min-width:8px;height:8px;transform:translateX(-50%) rotate(45deg)}
+@media(max-width:600px){.axisControls select{min-height:32px;width:auto}.axisControls label{font-size:12px}.axisRow{grid-template-columns:25% minmax(0,1fr)}}
+
+.effectLegend{display:flex;flex-wrap:wrap;gap:3px 12px;margin:3px 0}
+.effectLegend span{font-size:12px}
+.effectLegend span:before{content:'';display:inline-block;width:.8em;height:.5em;background:var(--effect);margin-right:3px}
+
+.pinnedSettings{position:sticky;top:0;z-index:9;background:#f8fbf9;border-bottom:1px solid #a6c7b7;padding:4px}
+.pinnedSettings .grid{grid-template-columns:repeat(8,minmax(0,1fr));gap:4px}
+.deckStrip{overflow:visible}
+.deckSlot{min-width:0;align-content:start}
+.cardSkills,.sourceGroup{background:white;border:1px solid #c8d8ce;border-radius:4px}
+.cardSkills:empty{display:none}
+.skillEntry{position:relative;border-bottom:1px solid #dbe6df;padding:1px 3px;color:#203c30}
+.skillEntry:last-child{border-bottom:0}
+.skillEntry .skillName{display:block;font-size:13px;line-height:1.22;text-align:left;width:100%;padding:3px 1px;margin:0;border-radius:3px;min-height:26px;overflow-wrap:anywhere}
+.skillName b{font-variant-numeric:tabular-nums;white-space:nowrap}
+.skillEntry.gold{border-inline-start:3px solid #bd8724;background:#fff4d3}
+.skillEntry.duplicate{color:#68766d;background:#edf0ee}
+.skillEntry.outside .skillName{text-decoration:underline dotted #ae6736}
+.entryWarning{display:block;color:#80490c;font-size:11px}
+.skillEntry details{margin:0}
+.skillEntry summary{font-size:11px;color:#506959;line-height:1.2;padding:2px}
+.entryDetail{background:#fff;border:1px solid #afc7b8;box-shadow:0 3px 12px #254f3633;padding:6px;font-size:13px;overflow-wrap:anywhere}
+.entryDetail label{display:block}
+.entryDetail p{margin:4px 0}
+.cardSkills .entryDetail{position:absolute;inset-inline-start:0;width:min(200px,64vw);z-index:7}
+.deckSlot:nth-child(n+4) .entryDetail{inset-inline-start:auto;inset-inline-end:0}
+#rows{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:5px;align-items:start}
+.sourceGroup{margin:0;padding:0}
+.sourceGroup h3{background:#456553;color:#fff;font-size:13px;margin:0;padding:3px 5px}
+.targetOptions label{display:inline-flex;align-items:center;gap:3px;padding:3px}
+@media(max-width:600px){
+ .pinnedSettings .grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:2px}
+ .pinnedSettings label,.pinnedSettings .traineeControl{font-size:11px;gap:0;overflow:hidden}
+ .pinnedSettings select,.pinnedSettings input{font-size:16px;min-height:28px;padding:2px}
+ .deckStrip{gap:2px;overflow:visible}
+ .skillEntry{padding:1px}
+ .skillEntry .skillName{font-size:11px;min-height:26px}
+ .skillEntry summary{font-size:10px}
+ .eventSlot label{font-size:10px}
+ #rows{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+
+.selectionBar{display:flex;flex-wrap:wrap;align-items:center;gap:3px 8px;margin:5px 0;background:#f4f8f5;padding:4px}
+.selectionBar p,.selectionBar .targetOptions{margin:0}.targetOptions strong{font-size:12px}
+.secondarySettings .grid{grid-template-columns:2fr repeat(6,minmax(0,1fr));gap:4px}
+.supportEvents{margin:4px 0}.eventGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:4px}
+.eventGrid section{margin:0;padding:5px}.eventGrid h3{font-size:12px;margin:0}
+.rewardLink,.infoButton{background:#f4f7f5;color:#18543f;padding:1px 2px;font-size:11px;min-height:24px;margin:0}
+.rewardLink{overflow:hidden;white-space:nowrap;width:100%}
+.skillEntry.gold{background:#fff0c1}.skillEntry.evolved{background:#ffe5ee;border-inline-start:3px solid #ce6188}
+.skillEntry .skillName[aria-pressed=true]{background:transparent;color:#143e2f;font-weight:800}
+.miniControls{display:flex;align-items:center;gap:1px}.miniControls select{width:auto;max-width:72%;min-width:0;min-height:22px;padding:0;font-size:11px}.miniControls button{width:auto;min-width:17px;min-height:22px}
+.badges{font-size:10px;line-height:1.2;color:#535e58}.badges span{padding:0 2px;margin-right:1px;border-radius:2px}
+.green{background:#bee7c7}.heal{background:#c4e7fd}.spd{background:#ffdf81}.acc{background:#ffc09b}.now{background:#e3ceff}.misc{background:#e3e6e4}
+.skillEntry.duplicate{border-inline-end:2px dashed #9ba49e}.review>div>small{display:block;font-size:10px;padding:2px}
+#skillInfo{max-width:min(92vw,520px);max-height:78vh;box-sizing:border-box;overflow:auto;border:1px solid #abc8b6;border-radius:8px;color:#233c30}
+#skillInfo form{float:right}#skillInfo dt{font-weight:700;margin-top:8px}#skillInfo dd{margin:1px 0;overflow-wrap:anywhere}
+@media(max-width:600px){.secondarySettings .grid{grid-template-columns:repeat(4,minmax(0,1fr))}.secondarySettings input{min-width:0;width:100%}.selectionBar label,.targetOptions label{font-size:11px}.selectionBar p{display:flex;gap:4px}.selectionBar button{font-size:12px;width:auto}.miniControls select{font-size:11px}.rewardLink{font-size:9px}.miniControls button{font-size:12px}.selectionBar input[type=checkbox]{min-height:16px;width:16px}.pinnedSettings #scenarioNotice{display:none}}
+
+.workspaceTabs{display:flex;gap:2px;flex-wrap:wrap;margin:0 0 5px}.workspaceTabs button{border:0;background:#e6eee9;color:#2c483a;font-size:12px;padding:5px 8px;width:auto;min-height:28px}.workspaceTabs button[aria-pressed=true]{background:#225b45;color:white}.workspacePane{min-width:0}
+
+.traitRow,.ocrRow{display:grid;grid-template-columns:minmax(54px,1fr) minmax(0,3fr) minmax(52px,1fr) 40px;gap:4px;margin:4px 0}.traitRow input,.ocrRow input{min-width:0}
+.dropArea{border:1px dashed #659779;padding:10px;background:#f2f8f3}.dropArea input{display:block;margin:5px 0}.ocrRow{grid-template-columns:24px minmax(0,3fr) 70px 55px}.ocrRow small{grid-column:2/-1}.inheritance{margin:4px 0}
+
+@media(max-width:600px){
+ .selectionBar{display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:3px}
+ .selectionBar .targetOptions{grid-column:1/-1;display:flex;align-items:center;flex-wrap:wrap;gap:2px}
+ .targetOptions strong{font-size:10px}.selectionBar .targetOptions label{padding:1px}
+ .selectionBar p{align-self:end}.selectionBar>label select,.selectionBar button{font-size:11px;min-height:27px;padding:2px}
+ .secondarySettings .grid{gap:2px}.secondarySettings .grid label{font-size:10px;gap:0}.secondarySettings .grid input,.secondarySettings .grid select{min-height:26px;padding:1px}
+ .setup>details,.setup>.eventSlot details,.inheritance,.supportEvents{margin:2px 0}
+ .deckSlot>select{min-width:0;width:100%}
+}
+.deckSlot{grid-template-columns:minmax(0,1fr)}.cardSkills,.skillEntry,.miniControls{min-width:0}.badges{overflow-wrap:anywhere}.miniControls{display:grid;grid-template-columns:minmax(0,1fr) 18px}.miniControls select{width:100%;max-width:none}.miniControls button{padding:0}
+@media(min-width:601px){.miniControls{grid-template-columns:56px 24px}}
+
+@media(max-width:600px){.miniControls select{appearance:none;text-align:center;border:1px solid #a7c3b2;background:#f1f6f3;font-size:11px;min-height:24px}.miniControls button{min-height:24px}}

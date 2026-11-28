@@ -1,0 +1,169 @@
+'use strict';
+
+const setupSection = setupGrid.closest('section');
+setupSection.classList.add('setup');
+setupSection.querySelector('h2').remove();
+const trainee = $('dbChar').closest('label');
+const traineeControl = document.createElement('div');
+traineeControl.className = 'traineeControl';
+trainee.replaceWith(traineeControl);
+traineeControl.append(...Array.from(trainee.childNodes));
+const charEvents = document.createElement('div');
+charEvents.id = 'charEvents';
+charEvents.className = 'eventSlot';
+const whiteHint = document.createElement('label');
+whiteHint.textContent = '白・最終Lv';
+const whiteLevel = document.createElement('select');
+whiteLevel.id = 'whiteHint';
+for (let level = 0; level <= 5; level++) whiteLevel.add(new Option(String(level)));
+whiteLevel.onchange = () => {
+  state.whiteHint = Number(whiteLevel.value);
+  render();
+};
+whiteHint.append(whiteLevel);
+const strip = document.createElement('div');
+strip.className = 'deckStrip';
+strip.setAttribute('aria-label', 'サポートカード編成');
+deckHeading.replaceWith(strip);
+const targets = ['dbChar', ...Array.from({length: 6}, (_, i) => 'dbCard' + i)];
+for (const [index, target] of targets.entries()) {
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.id = 'preview' + target;
+  button.className = 'selectedImage';
+  button.setAttribute('aria-label', index ? 'サポカ ' + index + ' を変更' : '育成ウマ娘を変更');
+  button.onclick = () => openPicker(target);
+  const preview = $(button.id);
+  preview.replaceWith(button);
+  if (!index) continue;
+  const original = $(target).closest('label');
+  const slot = document.createElement('div');
+  slot.className = 'deckSlot';
+  slot.append($(target), button, limitUI[index - 1].s);
+  const events = document.createElement('div');
+  events.className = 'eventSlot';
+  events.id = 'cardEvents' + (index - 1);
+  slot.append(events);
+  strip.append(slot);
+  original.remove();
+}
+const raceDetails = setupSection.querySelector('details');
+setupGrid.insertBefore($('distance').closest('label'), strip);
+setupGrid.insertBefore(whiteHint, strip);
+setupGrid.after(charEvents, $('eventChoices'), raceDetails, strip);
+$('dbSummary').hidden = true;
+const manual = raceDetails.querySelector('.grid');
+for (const k of ['char', ...Array.from({length: 6}, (_, i) => 'd' + i)]) {
+  const field = $(k).closest('label');
+  field.querySelector('select')?.remove();
+  manual.append(field);
+}
+const plan = $('rows').closest('section');
+plan.classList.add('plan');
+plan.querySelector('h2').textContent = '取得スキル';
+plan.querySelector('h2').after($('catalogStatus'));
+const totals = document.createElement('footer');
+totals.className = 'totals';
+totals.setAttribute('aria-label', '消費スキルPtと残りPt');
+totals.append($('stats'));
+document.querySelector('main').after(totals);
+for (const [id, title] of [['course', '発動区間'], ['editor', 'スキル・因子登録と保存'], ['catalogDetails', '編成データ・スキル検索'], ['dbstatus', '公開データ連携']]) {
+  // The legacy race input and the timeline had the same ID. Address the timeline by its section.
+  const section = id === 'course' ? Array.from(document.querySelectorAll('section')).find(s => s.querySelector('h2')?.textContent.includes('発動区間')) : $(id).closest('section');
+  const disclosure = document.createElement('details');
+  disclosure.className = 'toolPanel';
+  const summary = document.createElement('summary');
+  summary.textContent = title;
+  section.querySelector('h2').remove();
+  disclosure.append(summary, ...Array.from(section.childNodes));
+  section.replaceWith(disclosure);
+}
+const timeline = document.querySelector('.toolPanel > div[id="course"]');
+if (timeline) timeline.id = 'courseTimeline';
+$('runtime').hidden = true;
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape' && pickerTarget) closePicker();
+});
+const setupPlanner = dbSetup;
+dbSetup = function () {
+  whiteLevel.value = String(state.whiteHint ?? 5);
+  setupPlanner();
+  drawSelectedImages();
+};
+whiteLevel.value = String(state.whiteHint ?? 5);
+drawSelectedImages();
+
+const secondary = document.createElement('div');
+secondary.className = 'secondarySettings';
+const secondaryTitle = document.createElement('summary');
+secondaryTitle.textContent = '大会・覚醒・育成実績';
+
+const settingsFields = document.createElement('div');
+settingsFields.className = 'grid';
+secondary.append(settingsFields);
+sel.options[1].text='LoH・京都 3000m';sel.options[2].text='チャンミ・中山 2500m';
+settingsFields.append(race, $('awakening').closest('label'));
+for (const [key, name] of [[1,'スピード'],[2,'スタミナ'],[3,'パワー'],[4,'根性'],[5,'賢さ'],['fan','ファン数']]) {
+  const field = document.createElement('label');
+  field.textContent = name;
+  const input = document.createElement('input');
+  input.type = 'number';
+  input.min = '0';
+  input.placeholder = '未入力';
+  input.value = state.trainingFacts?.[key] ?? '';
+  input.onchange = () => {
+    (state.trainingFacts ??= {})[key] = input.value;
+    render();
+  };
+  field.append(input);
+  if(key==='fan'){
+    const details=document.createElement('details');
+    details.innerHTML='<summary>育成実績の詳細</summary>';details.append(field);secondary.append(details);
+  }else settingsFields.append(field);
+}
+setupGrid.after(secondary);
+
+const dataTools = $('dbstatus').closest('details');
+document.querySelector('main').append(dataTools);
+
+const board = document.createElement('div');
+board.id = 'rows';
+plan.querySelector('.scroll').replaceWith(board);
+for (const [i, slot] of [...strip.children].entries()) {
+  const list=document.createElement('div');
+  list.id='cardSkills'+i;
+  list.className='cardSkills';
+  slot.append(list);
+}
+board.parentNode.id='skillGroupsReady';
+const pinned=document.createElement('div');
+pinned.className='pinnedSettings';
+setupSection.before(pinned);
+pinned.append(setupGrid);
+const options=document.createElement('div');
+options.className='targetOptions';
+const title=document.createElement('strong');title.textContent='自動選択の対象';options.append(title);
+for (const [key,label,initial] of [['other','その他',true],['green','緑',true],['heal','回復',true],['training','進化条件',false],['raceNeeds','発動・強化条件',false]]) {
+  const wrap=document.createElement('label'),input=document.createElement('input');input.type='checkbox';input.checked=state.autoTargets?.[key]??initial;
+  input.onchange=()=>{(state.autoTargets??={})[key]=input.checked;save()};
+  wrap.append(input,label);options.append(wrap);
+}
+plan.querySelector('p:has(button)').before(options);
+
+const eventPanel=document.createElement('details');
+eventPanel.className='supportEvents';
+eventPanel.innerHTML='<summary>サポカの完走報酬・分岐設定</summary><div class="eventGrid"></div>';
+strip.before(eventPanel);
+for(let i=0;i<6;i++){
+  const section=document.createElement('section');
+  section.innerHTML='<h3 id="eventHeading'+i+'"></h3>';
+  const rewards=document.createElement('p');rewards.id='rewardNames'+i;section.append(rewards,$('cardEvents'+i));eventPanel.lastElementChild.append(section);
+  const button=document.createElement('button');button.id='reward'+i;button.className='rewardLink';
+  button.onclick=()=>{eventPanel.open=true;section.scrollIntoView({block:'center'});section.querySelector('select')?.focus({preventScroll:true})};
+  $('cardSkills'+i).before(button);
+}
+const actionBar=document.createElement('div');
+actionBar.className='selectionBar';
+setupSection.insertBefore(actionBar,strip);
+$('autoMode').querySelector('option[value="course"]').textContent='展開条件を除く（金・進化は含む）';
+actionBar.append(options,$('autoMode').closest('label'),plan.querySelector('p:has(button)'));

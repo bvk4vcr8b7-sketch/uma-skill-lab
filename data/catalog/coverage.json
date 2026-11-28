@@ -1,0 +1,667 @@
+{
+  "checkedOn": "2026-11-27",
+  "region": "JP",
+  "supports": 568,
+  "characters": 274,
+  "skills": 2236,
+  "events": {
+    "Charactor": {
+      "matched": 274,
+      "events": 16265,
+      "missing": []
+    },
+    "Support": {
+      "matched": 506,
+      "events": 2451,
+      "missing": [
+        10088,
+        10089,
+        10090,
+        10091,
+        10092,
+        10093,
+        10094,
+        10095,
+        10096,
+        10097,
+        10098,
+        10099,
+        10100,
+        10101,
+        10102,
+        10103,
+        10104,
+        10105,
+        10106,
+        10107,
+        10108,
+        10110,
+        10111,
+        10113,
+        10114,
+        10115,
+        10116,
+        10117,
+        10118,
+        10119,
+        10120,
+        10121,
+        10122,
+        10123,
+        10124,
+        10125,
+        10126,
+        10127,
+        10128,
+        10129,
+        10131,
+        10132,
+        10133,
+        10134,
+        10135,
+        10136,
+        10137,
+        10138,
+        10139,
+        10140,
+        10141,
+        10142,
+        10143,
+        10144,
+        10145,
+        10146,
+        10147,
+        10148,
+        10149,
+        30240,
+        30269,
+        30295
+      ]
+    }
+  },
+  "missingBasePt": [
+    120291,
+    102903111,
+    102903211,
+    100751,
+    107501111,
+    107501211,
+    107501221
+  ],
+  "missingActivation": [
+    300071,
+    300081,
+    300091,
+    300101,
+    1000011,
+    1000012,
+    1000013,
+    1000014,
+    1000015,
+    1000016,
+    1000017
+  ],
+  "missingSupportEventNames": [
+    {
+      "id": 10088,
+      "name": "[トレセン学園]メジロラモーヌ"
+    },
+    {
+      "id": 10089,
+      "name": "[トレセン学園]ジャングルポケット"
+    },
+    {
+      "id": 10090,
+      "name": "[トレセン学園]ホッコータルマエ"
+    },
+    {
+      "id": 10091,
+      "name": "[トレセン学園]カツラギエース"
+    },
+    {
+      "id": 10092,
+      "name": "[トレセン学園]コパノリッキー"
+    },
+    {
+      "id": 10093,
+      "name": "[トレセン学園]ワンダーアキュート"
+    },
+    {
+      "id": 10094,
+      "name": "[URA職員]佐岳メイ"
+    },
+    {
+      "id": 10095,
+      "name": "[トレセン学園]タップダンスシチー"
+    },
+    {
+      "id": 10096,
+      "name": "[トレセン学園]スティルインラブ"
+    },
+    {
+      "id": 10097,
+      "name": "[トレセン学園]ヴィルシーナ"
+    },
+    {
+      "id": 10098,
+      "name": "[トレセン学園]サウンズオブアース"
+    },
+    {
+      "id": 10099,
+      "name": "[トレセン学園]ヴィブロス"
+    },
+    {
+      "id": 10100,
+      "name": "[トレセン学園]ロイスアンドロイス"
+    },
+    {
+      "id": 10101,
+      "name": "[トレセン学園]ドゥラメンテ"
+    },
+    {
+      "id": 10102,
+      "name": "[トレセン学園]ノースフライト"
+    },
+    {
+      "id": 10103,
+      "name": "[トレセン学園]オルフェーヴル"
+    },
+    {
+      "id": 10104,
+      "name": "[プロデューサー]都留岐涼花"
+    },
+    {
+      "id": 10105,
+      "name": "[トレセン学園]シュヴァルグラン"
+    },
+    {
+      "id": 10106,
+      "name": "[トレセン学園]ネオユニヴァース"
+    },
+    {
+      "id": 10107,
+      "name": "[トレセン学園]ヒシミラクル"
+    },
+    {
+      "id": 10108,
+      "name": "[トレセン学園]ダンツフレーム"
+    },
+    {
+      "id": 10110,
+      "name": "[トレセン学園]エスポワールシチー"
+    },
+    {
+      "id": 10111,
+      "name": "[トレセン学園]バブルガムフェロー"
+    },
+    {
+      "id": 10113,
+      "name": "[トレセン学園]ジェンティルドンナ"
+    },
+    {
+      "id": 10114,
+      "name": "[トレセン学園]ラインクラフト"
+    },
+    {
+      "id": 10115,
+      "name": "[トレセン学園]シーザリオ"
+    },
+    {
+      "id": 10116,
+      "name": "[トレセン学園]ブラストワンピース"
+    },
+    {
+      "id": 10117,
+      "name": "[トレセン学園]ノーリーズン"
+    },
+    {
+      "id": 10118,
+      "name": "[トレセン学園]ブエナビスタ"
+    },
+    {
+      "id": 10119,
+      "name": "[トレセン学園]ドリームジャーニー"
+    },
+    {
+      "id": 10120,
+      "name": "[トレセン学園]デアリングタクト"
+    },
+    {
+      "id": 10121,
+      "name": "[トレセン学園]デアリングハート"
+    },
+    {
+      "id": 10122,
+      "name": "[トレセン学園]アーモンドアイ"
+    },
+    {
+      "id": 10123,
+      "name": "[トレセン学園]ラッキーライラック"
+    },
+    {
+      "id": 10124,
+      "name": "[トレセン学園]グランアレグリア"
+    },
+    {
+      "id": 10125,
+      "name": "[トレセン学園]トランセンド"
+    },
+    {
+      "id": 10126,
+      "name": "[トレセン学園]カレンブーケドール"
+    },
+    {
+      "id": 10127,
+      "name": "[トレセン学園]エアメサイア"
+    },
+    {
+      "id": 10128,
+      "name": "[無人島PJ責任者]タッカーブライン"
+    },
+    {
+      "id": 10129,
+      "name": "[トレセン学園]フサイチパンドラ"
+    },
+    {
+      "id": 10131,
+      "name": "[トレセン学園]ウインバリアシオン"
+    },
+    {
+      "id": 10132,
+      "name": "[トレセン学園]ステイゴールド"
+    },
+    {
+      "id": 10133,
+      "name": "[トレセン学園]アドマイヤグルーヴ"
+    },
+    {
+      "id": 10134,
+      "name": "[トレセン学園]クロノジェネシス"
+    },
+    {
+      "id": 10135,
+      "name": "[トレセン学園]カルストンライトオ"
+    },
+    {
+      "id": 10136,
+      "name": "[トレセン学園]デュランダル"
+    },
+    {
+      "id": 10137,
+      "name": "[トレセン学園]サクラチトセオー"
+    },
+    {
+      "id": 10138,
+      "name": "[ゆこま旅館女将]保科健子"
+    },
+    {
+      "id": 10139,
+      "name": "[トレセン学園]フェノーメノ"
+    },
+    {
+      "id": 10140,
+      "name": "[トレセン学園]フォーエバーヤング"
+    },
+    {
+      "id": 10141,
+      "name": "[『DREAMS』責任者]カジノドライヴ"
+    },
+    {
+      "id": 10142,
+      "name": "[トレセン学園]レッドディザイア"
+    },
+    {
+      "id": 10143,
+      "name": "[トレセン学園]ヴィクトワールピサ"
+    },
+    {
+      "id": 10144,
+      "name": "[トレセン学園]マルシュロレーヌ"
+    },
+    {
+      "id": 10145,
+      "name": "[トレセン学園]キセキ"
+    },
+    {
+      "id": 10146,
+      "name": "[トレセン学園]エフフォーリア"
+    },
+    {
+      "id": 10147,
+      "name": "[トレセン学園]ルーラーシップ"
+    },
+    {
+      "id": 10148,
+      "name": "[トレセン学園]サムソンビッグ"
+    },
+    {
+      "id": 10149,
+      "name": "[巫女]吾妻"
+    },
+    {
+      "id": 30240,
+      "name": "[『最強は俺だ！！』]ジャングルポケット"
+    },
+    {
+      "id": 30269,
+      "name": "[今日が楽しかったから、]ダンツフレーム"
+    },
+    {
+      "id": 30295,
+      "name": "[花ども集いて束となる]カレンブーケドール"
+    }
+  ],
+  "note": "イベント件数はカード・衣装別の収録数。全分岐の網羅性は未確定。スキル取得条件の網羅性は未集計。",
+  "supportPortraits": {
+    "checked": 568,
+    "replaced": [
+      {
+        "id": 10145,
+        "name": "[トレセン学園]キセキ",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/10145.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 10146,
+        "name": "[トレセン学園]エフフォーリア",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/10146.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 10147,
+        "name": "[トレセン学園]ルーラーシップ",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/10147.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 10148,
+        "name": "[トレセン学園]サムソンビッグ",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/10148.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 10149,
+        "name": "[巫女]吾妻",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/10149.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 20099,
+        "name": "[夕映えに身をゆだねて]メジロアルダン",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/20099.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 20100,
+        "name": "[瞬光]カルストンライトオ",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/20100.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 20101,
+        "name": "[清く、やわらかな夜]ゼンノロブロイ",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/20101.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 20102,
+        "name": "[黄昏に馳せる追憶]ステイゴールド",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/20102.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 30300,
+        "name": "[賑やかな未来を乗せて走れ！]サクラチヨノオー",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/30300.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 30301,
+        "name": "[スマイル・エバーアフター]グランアレグリア",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/30301.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 30302,
+        "name": "[永久の誓い、永久の輝き]サトノダイヤモンド",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/30302.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 30303,
+        "name": "[『ずーっと一緒、だぞー！』]ブラストワンピース",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/30303.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 30304,
+        "name": "[その執念は怒濤が如く]メイショウドトウ",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/30304.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 30305,
+        "name": "[一杯のノスタルジア]駿川たづな",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/30305.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 30306,
+        "name": "[両手いっぱい、小倉愛]ナイスネイチャ",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/30306.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 30307,
+        "name": "[巻頭カラーの夏]キセキ",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/30307.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 30308,
+        "name": "[夏空チルタイム]アーモンドアイ",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/30308.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 30309,
+        "name": "[天才的ガチエモSUMMER!!]フサイチパンドラ",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/30309.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 30310,
+        "name": "[ガブッと、笑顔に]レッドディザイア",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/30310.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 30311,
+        "name": "[As if Guided]エフフォーリア",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/30311.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 30312,
+        "name": "[時に交わる海と空]ミスターシービー",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/30312.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 30313,
+        "name": "[Endless Game]ルーラーシップ",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/30313.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 30314,
+        "name": "[わたしときみの交換こ♪]ハルウララ",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/30314.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 30315,
+        "name": "[ちょいワルヒーロー、見参！]ビコーペガサス",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/30315.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 30316,
+        "name": "[世界一小さなビッグバン]サムソンビッグ",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/30316.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 30317,
+        "name": "[行き先はあたたかな場所]マチカネタンホイザ",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/30317.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 30318,
+        "name": "[めぐるぐるぐるトレセン日和]ライスシャワー",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/30318.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 30319,
+        "name": "[晩餐]ナリタブライアン",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/30319.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 30320,
+        "name": "[冷凜なるビスクドール]アドマイヤグルーヴ",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/30320.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 30321,
+        "name": "[“最強”なる眷属]ドゥラメンテ",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/30321.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 30322,
+        "name": "[Time of Departure]マヤノトップガン",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/30322.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 30323,
+        "name": "[いとどめでたき、まつりかな]吾妻",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/30323.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      },
+      {
+        "id": 30324,
+        "name": "[馳せて奪うは映山紅]ノーリーズン",
+        "original": "https://raw.githubusercontent.com/shiyuzi-ship-it/umamusumedb/3e91e3ae5e56bac97fbfb964521e4a9cc32cc2a6/public/img/cards/30324.webp",
+        "dimensions": [
+          300,
+          400
+        ]
+      }
+    ],
+    "missing": []
+  }
+}
