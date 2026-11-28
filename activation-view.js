@@ -58,7 +58,7 @@ function activationChart(selectedSkills){
   html+='<div class="effectLegend">'+effectTypes.filter(k=>entries.some(e=>e.kind===k)).map(k=>'<span class="k'+effectTypes.indexOf(k)+'">'+k+'</span>').join('')+'</div>';
   for(const {s,kind,spans,partial,impossible} of entries){
     const text=spans.map(x=>(x.passive?'常時効果':x.random?'ランダム候補':x.a===x.b?'固定位置':'条件区間')+' '+Math.round(x.a)+'–'+Math.round(x.b)+'m'+(x.conditional?'（順位・展開条件あり）':'')).join(' ／ ');
-    const details='<details><summary>'+esc(s.name)+'</summary>'+esc(kind+' · '+(text||(impossible?'発動不可':'区間判定不能'))+(partial?' · 未照合条件あり':'')+' '+(catalogSkills.get(s.skillId)?.conditionText||[]).join(' ／ '))+'</details>';
+    const details='<details><summary>'+esc(s.name)+'</summary>'+esc(kind+' · '+(text||(impossible?'発動不可':'区間判定不能'))+(partial?' · 未照合条件あり':'')+' '+readableBranches(skillRecord(s)))+'</details>';
     html+=row(details,spans.length?spans.map(x=>bar(x.a,x.b,'skillBand k'+effectTypes.indexOf(kind)+(x.random?' random':'')+(x.a===x.b?' point':''),x.passive?'常時':'')).join(''):'<small>'+(impossible?'発動不可':'区間判定不能')+'</small>');
   }
   return html+(entries.length?'':'<small>該当スキルなし</small>');

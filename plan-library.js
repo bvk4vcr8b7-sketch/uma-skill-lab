@@ -33,22 +33,54 @@ function libraryLists(){
   const r=$('runnerList').value;$('runnerList').replaceChildren(option('','個体を選択'),...lib.runners.map(x=>option(x.id,x.race+'・'+x.name)));$('runnerList').value=r;
   $('runnerComparison').innerHTML=lib.runners.map(x=>'<p><b>'+esc(x.name)+'</b> '+esc([x.race,x.status,x.use,x.fit,Object.values(x.plan.trainingFacts||{}).join('/')].join(' · '))+'</p>').join('');
 }
-// Race rewards: Game8 448912; L'Arc overseas aptitude: Altema projectlarc.
-const factorRewards={レース:{'宝塚記念':'夏ウマ娘○','天皇賞(春)':'春ウマ娘○','天皇賞(秋)':'秋ウマ娘○','フェブラリーS':'冬ウマ娘○','有馬記念':'中山レース場○','ジャパンC':'東京レース場○','ジャパンカップ':'東京レース場○','菊花賞':'京都レース場○','秋華賞':'京都レース場○','エリザベス女王杯':'非根幹距離○','大阪杯':'根幹距離○','スプリンターズS':'根幹距離○','高松宮記念':'中京レース場○','帝王賞':'大井レース場○','東京大賞典':'大井レース場○'},シナリオ:{'凱旋門賞連覇の夢':'下り坂巧者'}};
+// Race rewards: Game8 448912 and Altema inshilist. L'Arc aptitude: Altema projectlarc.
+const factorRewards= {
+  レース: {
+    '桜花賞':'阪神レース場○',
+    '皐月賞':'中山レース場○',
+    'オークス':'東京レース場○',
+    '日本ダービー':'東京レース場○',
+    '安田記念':'東京レース場○',
+    'チャンピオンズC':'中京レース場○',
+    'マイルCS':'根幹距離○',
+    'JDダービー':'大井レース場○',
+    '宝塚記念':'夏ウマ娘○',
+    '天皇賞(春)':'春ウマ娘○',
+    '天皇賞(秋)':'秋ウマ娘○',
+    'フェブラリーS':'冬ウマ娘○',
+    '有馬記念':'中山レース場○',
+    'ジャパンC':'東京レース場○',
+    'ジャパンカップ':'東京レース場○',
+    '菊花賞':'京都レース場○',
+    '秋華賞':'京都レース場○',
+    'エリザベス女王杯':'非根幹距離○',
+    '大阪杯':'根幹距離○',
+    'スプリンターズS':'根幹距離○',
+    '高松宮記念':'中京レース場○',
+    '帝王賞':'大井レース場○',
+    '東京大賞典':'大井レース場○'
+  },
+  シナリオ: {
+    "L'Arcの希望":'コーナー巧者○',
+    '凱旋門賞連覇の夢':'下り坂巧者'
+  }
+};
 function syncFactors(){
   const old=state.skills.filter(s=>s.factorRef);
+  const planned=new Set(old.filter(s=>s.selected).map(skillIdentity));
   state.skills=state.skills.filter(s=>!s.factorRef);
   for(const [i,id] of (state.factorSlots||[]).entries()){
     const f=factorSource(id);if(!f)continue;
     for(const t of f.traits){
-      const name=['白','緑'].includes(t.type)?t.name:factorRewards[t.type]?.[t.name.normalize('NFKC')];
+      const name=['白','緑'].includes(t.type)?t.name:factorRewards[t.type]?.[t.name.normalize('NFKC').replace(/’/g,"'")];
       if(!name)continue;
-      const matches=catalog.skills.filter(s=>s.name===name);
+      const matches=catalog.skills.filter(s=>s.name===name&&(t.type!=='緑'||catalog.inheritedIds.includes(s.id)));
       if(matches.length!==1)continue;
-      const r=matches[0],ref=i+'/'+id+'/'+r.id;
-      state.skills.push({...old.find(s=>s.factorRef===ref),factorRef:ref,factorTrait:t.type+'・'+t.name,name:r.name,owner:roles[i]+' '+factorTitle(f),type:'因子',pt:r.baseSp,skillId:r.id,hint:0});
+      const r=matches[0],ref=i+'/'+id+'/'+r.id,previous=old.find(s=>s.factorRef===ref);
+      state.skills.push({...previous,factorRef:ref,factorTrait:t.type+'・'+t.name,name:r.name,owner:roles[i]+' '+factorTitle(f),type:'因子',pt:r.baseSp,skillId:r.id,hint:previous?.hint??0});
     }
   }
+  for(const s of state.skills)if(planned.has(skillIdentity(s))&&active(s)&&planAllowed(s))s.selected=true;
   render();
 }
 roles.forEach((role,i)=>{
@@ -82,3 +114,4 @@ if(historyRows.length){
   const archive=document.createElement('details');archive.innerHTML='<summary>旧保存の因子候補（未割当）</summary><ul>'+historyRows.map(s=>'<li>'+esc(s.name)+' · Lv'+hint(s)+'</li>').join('')+'</ul>';tabPages[1].append(archive);
 }
 libraryLists();fillFactor(null);
+if(catalog?.bySkillName){if(state.factorSlots?.some(Boolean))syncFactors();else render()}

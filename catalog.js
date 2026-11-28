@@ -80,7 +80,7 @@ const catalogApply=dbApply;
 dbApply=function(){catalogApply();catalogDetails()};
 async function loadCatalog(){
   try{
-    const keys=['supports','characters','skills','events','stories','eventLinks','portraits','courses','toresenken','geometry','evolutionRules','effectTypes','effectComponents','extraBranches','uniqueSkills'];
+    const keys=['supports','characters','skills','events','stories','eventLinks','portraits','courses','toresenken','geometry','evolutionRules','effectTypes','effectComponents','inheritedIds','extraBranches','uniqueSkills'];
     catalog=Object.fromEntries(await Promise.all(keys.map(async k=>[k,await getJSON('data/catalog/'+k+'.json')])));
     for(const [group,owners] of Object.entries(catalog.eventLinks)){
       const records=catalog.stories[group];
@@ -99,7 +99,7 @@ async function loadCatalog(){
     catalog.bySkillName=new Map();
     for(const s of catalog.skills)catalog.bySkillName.set(s.name,catalog.bySkillName.has(s.name)?null:s.id);
     dbSetup();
-    if(state.factorSlots?.some(Boolean))syncFactors();
+    if(state.factorSlots?.some(Boolean)&&typeof syncFactors==='function')syncFactors();
     $('catalogSkill').oninput=showCatalogSkill;
     $('catalogStatus').textContent='サポカ '+catalog.supports.length+'枚・育成 '+catalog.characters.length+'衣装。資料確認日 2026-11-27';
   }catch(e){$('catalogStatus').textContent='同梱DBの読み込み失敗　'+e.message}
@@ -120,7 +120,7 @@ function showCatalogSkill(){
       for(const e of c.evolutions||[])if(e.id===s.id)owners.push(c.name+' '+(e.parent||'')+'から進化');
     }
     p.style.whiteSpace='pre-wrap';
-    p.textContent=[s.description,...(s.conditionText||[]),...(s.branches||[]).map(b=>[b.precondition,b.condition].filter(Boolean).join(' → ')),...owners].filter(Boolean).join('\n');
+    p.textContent=[s.description,readableBranches(s),...owners].filter(Boolean).join('\n');
     d.append(title,p);box.append(d);
   }
 }

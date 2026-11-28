@@ -1,4 +1,5 @@
 from playwright.sync_api import sync_playwright
+from skill_sources import check_skill_sources
 from auto_button import check_auto_button
 import os
 import subprocess
@@ -30,6 +31,8 @@ with sync_playwright() as pw:
         }""")
         page.goto('http://127.0.0.1:8765/')
         page.wait_for_function("document.getElementById('catalogStatus').textContent.includes('568')")
+        assert page.evaluate("state.skills.some(s=>s.type==='因子'&&s.name==='右回り○') && !state.skills.some(s=>s.type==='因子'&&active(s))")
+        assert '継承因子が設定されていません' in page.locator('.inheritance summary').inner_text()
         assert page.locator('#dbCard0 option').count() == 569
         assert page.locator('#dbChar option').count() == 275
         assert page.evaluate('catalog.skills.length') == 2236
@@ -188,6 +191,7 @@ with sync_playwright() as pw:
         page.locator('#saveFactor').click()
         factor_id=page.locator('#factorList').input_value()
         assert factor_id
+        assert not page.evaluate("state.skills.some(s=>s.factorRef)")
         page.get_by_role('button',name='Pt計算機',exact=True).click()
         page.locator('.inheritance summary').click()
         page.locator('.inheritance select').first.select_option(factor_id)
@@ -198,12 +202,26 @@ with sync_playwright() as pw:
         assert page.get_by_text('比較個体',exact=True).is_visible()
         page.locator('#runnerOpen').click()
         page.wait_for_function("document.getElementById('catalogStatus').textContent.includes('568')")
-        assert page.evaluate("state.factorSlots[0]") == factor_id
+        assert page.evaluate("state.factorSlots[0]")==factor_id
+        assert page.evaluate("state.skills.some(s=>s.factorRef&&active(s))")
+        assert page.evaluate("""() => {
+            const lib=loadLibrary(),f=lib.factors[0];
+            f.traits.push({name:'宝塚記念',type:'レース',stars:3},{name:'凱旋門賞連覇の夢',type:'シナリオ',stars:2},{name:'シューティングスター',type:'緑',stars:3});
+            writeLibrary(lib);syncFactors();
+            return state.skills.some(s=>s.factorRef&&s.skillId===900011)&&['夏ウマ娘○','下り坂巧者'].every(name=>state.skills.some(s=>s.factorRef&&s.name===name&&hint(s)===0));
+        }""")
+        page.evaluate("const f=state.skills.find(s=>s.factorRef&&s.name==='夏ウマ娘○');toggleSkill(state.skills.indexOf(f),true)")
+        page.locator('.inheritance summary').click()
+        page.locator('.inheritance select').first.select_option('')
+        assert not page.evaluate("state.skills.some(s=>s.factorRef)")
+        assert page.evaluate("!chosen()[0].has(catalog.bySkillName.get('夏ウマ娘○'))||state.skills.some(s=>s.name==='夏ウマ娘○'&&active(s))")
+
         assert not errors, errors
         page.close()
     page=browser.new_page()
     page.route('https://**/*',lambda route:route.abort())
     page.goto('http://127.0.0.1:8765/')
     page.wait_for_function("document.getElementById('catalogStatus').textContent.includes('568')")
+    check_skill_sources(page)
     check_auto_button(page)
     browser.close()
